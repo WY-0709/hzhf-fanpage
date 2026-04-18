@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>黄子弘凡 Lars · 27岁生日特辑</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#0d1b4b 0%,#1a0533 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'PingFang SC','Noto Serif SC',serif;
+  padding:2rem;
+}
+.invite{
+  width:min(360px,92vw);
+  background:#fdf6ee;
+  border-radius:4px;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+.invite-top{
+  background:linear-gradient(135deg,#0d1b4b,#1a0533);
+  padding:2.2rem 2rem 1.8rem;
+  text-align:center;
+  position:relative;
+}
+.invite-top::after{
+  content:"";position:absolute;bottom:-1px;left:0;right:0;height:24px;
+  background:#fdf6ee;
+  clip-path:ellipse(55% 100% at 50% 100%);
+}
+.stars{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.6;}
+.kicker{font-size:.62rem;letter-spacing:.25em;color:rgba(245,166,35,.7);margin-bottom:1rem;}
+.name-zh{font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:.1em;}
+.name-en{font-size:.8rem;color:rgba(255,255,255,.5);letter-spacing:.2em;margin-top:.3rem;}
+.invite-body{padding:1.8rem 2rem 1.5rem;text-align:center;}
+.divider{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:rgba(232,160,0,.3);}
+.divider span{font-size:.65rem;color:#F5A623;letter-spacing:.15em;}
+.desc{font-size:.82rem;color:#5a4a3a;line-height:1.8;margin-bottom:1.4rem;}
+.qr-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-bottom:1.4rem;}
+.qr-wrap canvas{border:3px solid rgba(232,160,0,.3);border-radius:8px;padding:6px;background:#fff;}
+.qr-hint{font-size:.65rem;color:#7a6a58;letter-spacing:.1em;}
+.btn-enter{
+  display:block;padding:.75rem;
+  background:#F5A623;color:#0d0c08;
+  border-radius:9999px;font-weight:700;font-size:.9rem;
+  text-decoration:none;letter-spacing:.05em;
+  box-shadow:0 4px 16px rgba(245,166,35,.35);
+}
+.invite-footer{
+  background:rgba(245,166,35,.06);
+  border-top:1px solid rgba(232,160,0,.15);
+  padding:.7rem;text-align:center;
+  font-size:.62rem;color:#7a6a58;letter-spacing:.1em;
+}
+</style>
+</head>
+<body>
+<div class="invite">
+  <div class="invite-top">
+    <div class="stars" id="stars"></div>
+    <div class="kicker">BIRTHDAY INVITATION · 蟹黄堡应援</div>
+    <div class="name-zh">黄子弘凡</div>
+    <div class="name-en">LARS HUANG · 1999.04.21</div>
+  </div>
+  <div class="invite-body">
+    <div class="divider"><span>诚邀入场</span></div>
+    <p class="desc">
+      二十七岁生日快乐<br>
+      跨越山海，听见他的生命力<br>
+      <strong style="color:#F5A623;">扫码或点击进入生日特辑</strong>
+    </p>
+    <div class="qr-wrap">
+      <canvas id="qr"></canvas>
+      <span class="qr-hint">扫描二维码</span>
+    </div>
+    <a class="btn-enter" href="http://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com">进入生日特辑 →</a>
+  </div>
+  <div class="invite-footer">粉丝非官方制作 · 蟹黄堡出品</div>
+</div>
+
+<script>
+// 星点
+const s=document.getElementById("stars");
+for(let i=0;i<40;i++){
+  const d=document.createElement("div");
+  d.className="star";
+  d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${Math.random()*.7+.2};width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;`;
+  s.appendChild(d);
+}
+// 二维码
+QRCode.toCanvas(document.getElementById("qr"),"http://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com",{width:140,margin:1,color:{dark:"#2a1e0e",light:"#ffffff"}});
+</script>
+</body>
+</html>
