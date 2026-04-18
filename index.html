@@ -3246,6 +3246,7 @@ function genBdayCard(){
   const dl=document.getElementById("bc-download");
   dl.href=cv.toDataURL("image/png");
   dl.style.display="block";
+  document.getElementById("bc-hint2").style.display="block";
 }
 
 /* ══ 入场券 ══ */
@@ -3358,12 +3359,6 @@ document.querySelectorAll(".photo-strip img").forEach(img=>{
 })();
 
 function escHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-const _origGen=genBdayCard;
-genBdayCard=function(){
-  _origGen();
-  document.getElementById("bc-hint2").style.display="block";
-};
 
 // ── 测试结果保存图片 ──
 function saveTestImg(type){
