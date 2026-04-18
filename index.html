@@ -117,6 +117,7 @@
     .bday-units{display:flex;gap:.5rem;align-items:center;}
     .bday-unit{text-align:center;min-width:44px;background:rgba(255,255,255,.08);border-radius:8px;padding:.25rem .4rem;}
     .bday-unit span:first-child{display:block;font-size:1.3rem;font-weight:700;color:#fff;line-height:1;}
+    .bday-unit span:first-child.loading{animation:pulse 1s ease-in-out infinite;color:rgba(255,255,255,.4);}
     .bday-unit span:last-child{display:block;font-size:.62rem;color:rgba(255,255,255,.5);margin-top:.1rem;}
     .bday-sep{color:#F5A623;font-size:1.1rem;font-weight:700;margin-bottom:.2rem;}
     #bday-live{color:#22c55e;font-size:.9rem;font-weight:700;animation:pulse 1.2s ease-in-out infinite;}
@@ -991,13 +992,13 @@
     <span id="ring-label">0%</span>
   </div>
   <div class="bday-units">
-    <div class="bday-unit"><span id="bd-d">--</span><span>天</span></div>
+    <div class="bday-unit"><span id="bd-d" class="loading">--</span><span>天</span></div>
     <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-h">--</span><span>时</span></div>
+    <div class="bday-unit"><span id="bd-h" class="loading">--</span><span>时</span></div>
     <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-m">--</span><span>分</span></div>
+    <div class="bday-unit"><span id="bd-m" class="loading">--</span><span>分</span></div>
     <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-s">--</span><span>秒</span></div>
+    <div class="bday-unit"><span id="bd-s" class="loading">--</span><span>秒</span></div>
   </div>
   <span id="bday-live" style="display:none"><span aria-hidden="true">🎉</span> 生日快乐！</span>
 </div>
@@ -1377,8 +1378,8 @@
 
 <footer>
   <p>用爱整理 · 粉丝非官方页面 &nbsp;|&nbsp; <span>黄子弘凡 Lars</span></p>
-  <p style="margin-top:.4rem">素材版权归原创者所有 · 蟹黄堡出品</p>
-  <p style="margin-top:.8rem;font-size:.72rem;color:var(--muted);opacity:.7;">本网页仅用于生日应援及非营利性安利，图片素材归原作者/官方所有，如有侵权请联系删除。</p>
+  <p style="margin-top:.4rem;font-size:.88rem;font-weight:600;color:var(--text);">素材版权归原创者所有 · 蟹黄堡出品</p>
+  <p style="margin-top:.8rem;font-size:.75rem;color:var(--muted);opacity:.85;">本网页仅用于生日应援及非营利性安利，图片素材归原作者/官方所有，如有侵权请联系删除。</p>
 </footer>
 
 <script>
@@ -3143,6 +3144,7 @@ document.querySelectorAll(".tl-item,.album-card,.musical-card,.review-card,.awar
     document.getElementById("bd-h").textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,"0");
     document.getElementById("bd-m").textContent=String(Math.floor(diff%3600000/60000)).padStart(2,"0");
     document.getElementById("bd-s").textContent=String(Math.floor(diff%60000/1000)).padStart(2,"0");
+    ["bd-d","bd-h","bd-m","bd-s"].forEach(id=>document.getElementById(id).classList.remove("loading"));
   }
   tick(); setInterval(tick,1000);
 
