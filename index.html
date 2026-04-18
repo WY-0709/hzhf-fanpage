@@ -196,7 +196,7 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(245,166,35,.25);
     }
-    .nav-logo { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--yellow); font-family:'Playfair Display',serif; }
+    .nav-logo { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--yellow); font-family:'Playfair Display',serif; white-space:nowrap; }
     .nav-links { display: flex; gap: 1.6rem; }
     .nav-links a {
       font-size: 0.88rem; color: rgba(255,255,255,.65);
@@ -204,7 +204,12 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--yellow); }
-    @media(max-width:540px){ .nav-links { gap:.9rem; } .nav-links a { font-size:.78rem; } }
+    @media(max-width:540px){
+      nav { padding:0 .8rem; gap:.5rem; }
+      .nav-links { gap:0; overflow-x:auto; scrollbar-width:none; flex-shrink:1; min-width:0; }
+      .nav-links::-webkit-scrollbar { display:none; }
+      .nav-links a { font-size:.78rem; white-space:nowrap; padding:.4rem .6rem; }
+    }
 
     /* ── HERO SLIDESHOW ── */
     .hero-slides {
@@ -499,7 +504,11 @@
     }
     .tl-name { font-size:1rem; font-weight:800; color:var(--text); }
     .tl-body { padding:1rem 1.4rem 1.2rem; background:var(--card); }
-    .tl-desc { font-size:.86rem; color:#5a4a3a; line-height:1.7; }
+    .tl-desc { font-size:.86rem; color:#5a4a3a; line-height:1.8; }
+    .tl-desc-inner { overflow:hidden; }
+    .tl-desc-inner.clamped { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    .tl-toggle { font-size:.75rem; color:var(--yellow); cursor:pointer; margin-top:.4rem; display:none; background:none; border:none; padding:0; letter-spacing:.04em; }
+    @media(max-width:600px){ .tl-toggle { display:inline-block; } .tl-desc-inner { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; } .tl-desc-inner.expanded { display:block; } }
     .tl-links { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
     .tl-link {
       font-size:.75rem; color:var(--yellow); text-decoration:none;
@@ -656,8 +665,11 @@
       background:var(--card); border:1px solid rgba(232,160,0,.15);
       border-radius:var(--r); padding:1.4rem 1.5rem;
       transition: border-color .25s, transform .2s;
+      position:relative;
     }
+    .edu-card::after { content:"→"; position:absolute; top:1.2rem; right:1.2rem; color:var(--yellow); opacity:.5; font-size:.9rem; }
     .edu-card:hover { border-color:var(--border); transform:translateY(-2px); }
+    .edu-card:hover::after { opacity:1; }
     .edu-label {
       font-size:.9rem; letter-spacing:.08em; color:var(--yellow); margin-bottom:.5rem;
       font-weight:700; display:flex; align-items:center; gap:.5rem;
@@ -1287,7 +1299,7 @@
 <section id="why-sec" style="padding:5rem 1.5rem;background:linear-gradient(180deg,transparent,rgba(13,10,30,.04),transparent);">
   <div style="max-width:860px;margin:0 auto;">
     <div class="sec-title" data-en="Why This Era Needs Him"><div class="sec-title-line">为什么这个时代需要这样一位歌手</div></div>
-    <p style="color:var(--muted);font-size:.95rem;line-height:1.9;margin:1.4rem 0 2.8rem;max-width:680px;">2020年，他在vlog里说过一句话，不是综艺金句，是20岁的他对着镜头说的：「过去改变不了，未来展望不到，现在凑合着过吧。」这句话后来被很多人截图转发。不是因为它励志，而是因为它真实——真实到像是说出了很多人藏在心里、却不敢说出口的那种疲惫与坦然。这或许就是他存在的意义：不是给你一个完美的偶像，而是给你一个真实的同行者。</p>
+    <p style="color:var(--muted);font-size:.95rem;line-height:2;margin:1.4rem 0 2.8rem;max-width:680px;">2020年，他在vlog里说过一句话，不是综艺金句，是20岁的他对着镜头说的：「过去改变不了，未来展望不到，现在凑合着过吧。」这句话后来被很多人截图转发。不是因为它励志，而是因为它真实——真实到像是说出了很多人藏在心里、却不敢说出口的那种疲惫与坦然。这或许就是他存在的意义：不是给你一个完美的偶像，而是给你一个真实的同行者。</p>
 
     <!-- 三维度卡片 -->
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.6rem;margin-bottom:3rem;">
@@ -2061,7 +2073,7 @@ $("tl").innerHTML = TIMELINE.map(t=>`
       <span class="tl-name">${t.name}</span>
     </div>
     <div class="tl-body">
-      <div class="tl-desc">${t.desc}</div>
+      <div class="tl-desc"><div class="tl-desc-inner">${t.desc}</div><button class="tl-toggle" onclick="toggleTl(this)">展开 ↓</button></div>
       ${t.links.length ? `<div class="tl-links">${t.links.map(l=>
         `<a class="tl-link" href="${l.url}" target="_blank" rel="noopener">${l.text}</a>`
       ).join("")}</div>` : ""}
@@ -2911,6 +2923,7 @@ document.getElementById("energy-card").addEventListener("click", drawEnergy);
 })();
 
 function stripScroll(dir){ const s=document.getElementById("photo-strip"); if(s) s.scrollBy({left:dir*600,behavior:"smooth"}); }
+function toggleTl(btn){ const inner=btn.previousElementSibling; const expanded=inner.classList.toggle("expanded"); btn.textContent=expanded?"收起 ↑":"展开 ↓"; }
 
 /* ══ 粉类测试 ══ */
 const FT_QS=[
