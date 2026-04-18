@@ -3199,7 +3199,7 @@ function launchConfetti(){
 
 /* ══ 悬浮分享球 ══ */
 document.getElementById("share-fab").addEventListener("click",()=>{
-  const url=location.href.replace(/^https:/,"http:");
+  const url=location.href;
   navigator.clipboard.writeText(url).catch(()=>{});
   const t=document.getElementById("share-toast");
   t.classList.add("show");
