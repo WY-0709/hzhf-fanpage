@@ -665,19 +665,16 @@
       background:var(--card); border:1px solid rgba(232,160,0,.15);
       border-radius:var(--r); padding:1.4rem 1.5rem;
       transition: border-color .25s, transform .2s;
-      position:relative;
     }
-    .edu-card::after { content:"→"; position:absolute; top:1.2rem; right:1.2rem; color:var(--yellow); opacity:.5; font-size:.9rem; }
     .edu-card:hover { border-color:var(--border); transform:translateY(-2px); }
-    .edu-card:hover::after { opacity:1; }
     .edu-label {
       font-size:.9rem; letter-spacing:.08em; color:var(--yellow); margin-bottom:.5rem;
       font-weight:700; display:flex; align-items:center; gap:.5rem;
     }
     .edu-label::after { content:""; flex:1; height:1px; background:rgba(245,196,0,.2); }
     .edu-text { font-size:.85rem; color:var(--muted); line-height:1.7; }
-    .edu-text a { color:var(--yellow); text-decoration:none; }
-    .edu-text a:hover { text-decoration:underline; }
+    .edu-text a { color:var(--yellow); text-decoration:underline; font-weight:600; }
+    .edu-text a:hover { color:var(--yellow-dim); }
 
     /* ── 小习惯翻牌 ── */
     .habit-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.4rem; margin-top:1.5rem; }
@@ -2924,6 +2921,13 @@ document.getElementById("energy-card").addEventListener("click", drawEnergy);
 
 function stripScroll(dir){ const s=document.getElementById("photo-strip"); if(s) s.scrollBy({left:dir*600,behavior:"smooth"}); }
 function toggleTl(btn){ const inner=btn.previousElementSibling; const expanded=inner.classList.toggle("expanded"); btn.textContent=expanded?"收起 ↑":"展开 ↓"; }
+// 只对真正溢出的卡片显示展开按钮
+if(window.innerWidth<=600){
+  document.querySelectorAll(".tl-toggle").forEach(btn=>{
+    const inner=btn.previousElementSibling;
+    if(inner.scrollHeight<=inner.clientHeight+4) btn.style.display="none";
+  });
+}
 
 /* ══ 粉类测试 ══ */
 const FT_QS=[
