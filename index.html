@@ -3390,10 +3390,13 @@ function genSupportCard(){
   _scKey=activeBtn.dataset.key;
   const d=SC_DATA[_scKey];
   if(!d)return;
-  const W=600,H=340;
+  const W=600,H=340,DPR=2;
   const cv=document.getElementById("sc-canvas");
-  cv.width=W; cv.height=H; cv.style.display="block";
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+"px"; cv.style.height=H+"px";
+  cv.style.display="block";
   const ctx=cv.getContext("2d");
+  ctx.scale(DPR,DPR);
   // 背景渐变
   const bg=ctx.createLinearGradient(0,0,W,H);
   bg.addColorStop(0,d.color[0]); bg.addColorStop(1,d.color[1]);
@@ -3439,20 +3442,16 @@ function genSupportCard(){
   ctx.font="11px 'PingFang SC',sans-serif";
   ctx.fillStyle="rgba(255,255,255,.4)";
   ctx.fillText("粉丝非官方制作 · 蟹黄堡出品",24,H-16);
-  // 底部右：二维码区域（小方块占位，用QRCode.js绘制）
+  // 底部右：二维码（透明背景，深色码点）
   const qrSize=72; const qrX=W-qrSize-20; const qrY=H-qrSize-20;
-  ctx.fillStyle="rgba(255,255,255,.95)"; ctx.beginPath();
-  ctx.roundRect(qrX-4,qrY-4,qrSize+8,qrSize+8,6); ctx.fill();
-  // 生成QR并绘制到canvas
   const tmp=document.createElement("canvas");
-  QRCode.toCanvas(tmp,"https://WY-0709.github.io/hzhf-fanpage",{width:qrSize,margin:0,color:{dark:"#1a1a2e",light:"#ffffff"}},()=>{
+  QRCode.toCanvas(tmp,"https://WY-0709.github.io/hzhf-fanpage",{width:qrSize*2,margin:0,color:{dark:"#ffffff",light:"#00000000"}},()=>{
     ctx.drawImage(tmp,qrX,qrY,qrSize,qrSize);
     ctx.font="9px 'PingFang SC',sans-serif";
     ctx.fillStyle="rgba(255,255,255,.35)";
     ctx.textAlign="right";
     ctx.fillText("扫码进入生日特辑",W-20,H-10);
     ctx.textAlign="left";
-    // 完成，显示下载
     document.getElementById("sc-download").href=cv.toDataURL("image/png");
     document.getElementById("sc-dl-wrap").style.display="block";
   });
