@@ -850,7 +850,7 @@
     .pt-opt {
       padding:.8rem 1.4rem; border-radius:var(--r); cursor:pointer; text-align:left;
       border:1.5px solid rgba(96,180,245,.2); background:var(--card);
-      color:#5a4a3a; font-size:.9rem; transition:all .2s;
+      color:#5a4a3a; font-size:.9rem; transition:all .2s; word-break:keep-all;
     }
     .pt-opt:hover { border-color:var(--blue); color:var(--blue); background:rgba(96,180,245,.06); }
     .pt-result {
@@ -903,6 +903,7 @@
       .ft-options{grid-template-columns:1fr;}
       .pt-options{flex-direction:column;align-items:stretch;}
       .pt-options .btn{text-align:center;justify-content:center;}
+      .pt-opt{font-size:.82rem;padding:.65rem 1rem;}
       .award-list{grid-template-columns:1fr;}
       .social-grid{grid-template-columns:1fr 1fr;}
       .stats-bar{grid-template-columns:1fr 1fr;}
@@ -934,7 +935,7 @@
       /* 地图自适应 */
       #map-canvas{height:auto;}
       /* 弹幕输入区 */
-      #danmu-input{width:80px;}
+      #danmu-input{width:calc(100vw - 220px);min-width:80px;max-width:160px;}
     }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
@@ -1203,6 +1204,14 @@
     <div id="entry-result" style="display:none;background:var(--card);border:2px solid var(--purple);border-radius:20px;padding:1.5rem;margin-top:1.5rem;text-align:left">
       <div id="entry-title" style="font-size:1.1rem;font-weight:900;color:var(--purple);margin-bottom:.8rem"></div>
       <div id="entry-desc" style="font-size:.9rem;color:var(--text);line-height:1.9"></div>
+      <div style="margin-top:1.2rem;text-align:center">
+        <button class="btn-primary ripple-host" onclick="genSupportCard()" style="border-radius:999px;padding:.65rem 2rem;font-size:.9rem;background:linear-gradient(135deg,var(--purple),#7c3aed)">✦ 生成我的专属应援卡</button>
+      </div>
+      <canvas id="sc-canvas" style="display:none;margin-top:1.2rem;max-width:100%;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.2)"></canvas>
+      <div id="sc-dl-wrap" style="display:none;text-align:center;margin-top:.8rem">
+        <a id="sc-download" download="我的应援卡.png" class="btn-primary" style="border-radius:999px;padding:.6rem 2rem;font-size:.88rem;display:inline-block;text-decoration:none">保存应援卡</a>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem">保存后发到微博/小红书为 Lars 庆生！</p>
+      </div>
     </div>
   </div>
 </div>
@@ -3364,6 +3373,90 @@ document.querySelectorAll(".photo-strip img").forEach(img=>{
 })();
 
 function escHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ══ 专属应援卡 ══ */
+const SC_DATA={
+  voice: {label:"从《声入人心》入坑",copy:"你见证了他最初登台的模样\n那时青涩，如今已站上鸟巢",color:["#0d1b4b","#1a0533"],accent:"#a78bfa"},
+  musical:{label:"从音乐剧入坑",      copy:"舞台上的他，每一帧都是艺术\n细腻入微，打动了最挑剔的你",color:["#1a0533","#2d0a5f"],accent:"#c084fc"},
+  concert:{label:"从演唱会/音乐节入坑",copy:"那一刻现场的震撼让你明白\n有些声音，是要亲历才懂得的",color:["#0a1628","#0d2b4b"],accent:"#60a5fa"},
+  variety:{label:"从综艺节目入坑",    copy:"真实、有趣、藏不住的才华\n节目之外，他依然那么闪光",color:["#1a1a0d","#2d2800"],accent:"#F5A623"},
+  song:   {label:"从一首歌入坑",      copy:"一首歌，开启了整片宇宙\n你知道，这只是一个开始",color:["#0d1b1a","#0a2b20"],accent:"#34d399"},
+  tft:    {label:"从THE FIRST TAKE入坑",copy:"一镜到底，无处遁形的真实\n那份专注让你停不下来",color:["#1a0a0a","#2d0f0f"],accent:"#f87171"},
+};
+let _scKey="";
+function genSupportCard(){
+  const activeBtn=document.querySelector(".entry-btn.active");
+  if(!activeBtn)return;
+  _scKey=activeBtn.dataset.key;
+  const d=SC_DATA[_scKey];
+  if(!d)return;
+  const W=600,H=340;
+  const cv=document.getElementById("sc-canvas");
+  cv.width=W; cv.height=H; cv.style.display="block";
+  const ctx=cv.getContext("2d");
+  // 背景渐变
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,d.color[0]); bg.addColorStop(1,d.color[1]);
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // 星点装饰
+  ctx.fillStyle="rgba(255,255,255,.5)";
+  [[60,40],[180,80],[320,30],[450,60],[540,100],[80,200],[260,180],[480,220],[150,290],[400,310]].forEach(([x,y])=>{
+    ctx.beginPath(); ctx.arc(x,y,Math.random()*1.5+.5,0,Math.PI*2); ctx.fill();
+  });
+  // 左侧竖线accent
+  ctx.fillStyle=d.accent; ctx.fillRect(0,0,4,H);
+  // 顶部标签
+  ctx.font="bold 11px 'PingFang SC',sans-serif";
+  ctx.fillStyle="rgba(255,255,255,.5)";
+  ctx.letterSpacing="3px";
+  ctx.fillText("LARS HUANG FANCARD · 蟹黄堡应援",24,28);
+  ctx.letterSpacing="0px";
+  // 主名字
+  ctx.font="bold 52px 'PingFang SC',serif";
+  ctx.fillStyle="#ffffff";
+  ctx.fillText("黄子弘凡",24,92);
+  // 英文名
+  ctx.font="500 16px 'Playfair Display',serif";
+  ctx.fillStyle="rgba(255,255,255,.55)";
+  ctx.fillText("LARS HUANG · 1999.04.21",24,116);
+  // 分隔线
+  ctx.strokeStyle=d.accent+"88"; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(24,132); ctx.lineTo(W-24,132); ctx.stroke();
+  // 入坑路径标签
+  ctx.font="bold 13px 'PingFang SC',sans-serif";
+  ctx.fillStyle=d.accent;
+  ctx.fillText("✦ "+d.label,24,158);
+  // 专属文案（两行）
+  const lines=d.copy.split("\n");
+  ctx.font="17px 'PingFang SC',sans-serif";
+  ctx.fillStyle="rgba(255,255,255,.88)";
+  lines.forEach((line,i)=>ctx.fillText(line,24,190+i*26));
+  // 底部装饰条
+  const bar=ctx.createLinearGradient(0,H-48,W,H-48);
+  bar.addColorStop(0,"rgba(255,255,255,.04)"); bar.addColorStop(1,"rgba(255,255,255,.01)");
+  ctx.fillStyle=bar; ctx.fillRect(0,H-48,W,48);
+  // 底部左：粉丝站标注
+  ctx.font="11px 'PingFang SC',sans-serif";
+  ctx.fillStyle="rgba(255,255,255,.4)";
+  ctx.fillText("粉丝非官方制作 · 蟹黄堡出品",24,H-16);
+  // 底部右：二维码区域（小方块占位，用QRCode.js绘制）
+  const qrSize=72; const qrX=W-qrSize-20; const qrY=H-qrSize-20;
+  ctx.fillStyle="rgba(255,255,255,.95)"; ctx.beginPath();
+  ctx.roundRect(qrX-4,qrY-4,qrSize+8,qrSize+8,6); ctx.fill();
+  // 生成QR并绘制到canvas
+  const tmp=document.createElement("canvas");
+  QRCode.toCanvas(tmp,"https://WY-0709.github.io/hzhf-fanpage",{width:qrSize,margin:0,color:{dark:"#1a1a2e",light:"#ffffff"}},()=>{
+    ctx.drawImage(tmp,qrX,qrY,qrSize,qrSize);
+    ctx.font="9px 'PingFang SC',sans-serif";
+    ctx.fillStyle="rgba(255,255,255,.35)";
+    ctx.textAlign="right";
+    ctx.fillText("扫码进入生日特辑",W-20,H-10);
+    ctx.textAlign="left";
+    // 完成，显示下载
+    document.getElementById("sc-download").href=cv.toDataURL("image/png");
+    document.getElementById("sc-dl-wrap").style.display="block";
+  });
+}
 
 // ── 测试结果保存图片 ──
 function saveTestImg(type){
