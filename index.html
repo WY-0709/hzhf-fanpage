@@ -1395,10 +1395,10 @@
     <textarea id="bc-msg" placeholder="写下你的祝福…" rows="3" style="width:100%;max-width:340px;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);font-size:.95rem;color:var(--text);resize:none;"></textarea>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
       <span style="font-size:.85rem;color:var(--muted);align-self:center;">主题：</span>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="star" checked style="display:none"><span id="bc-t-star" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #F5A623;background:#0d1b4b;color:#F5A623;font-size:.8rem;">🌟 星空</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="pink" style="display:none"><span id="bc-t-pink" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #f472b6;background:#2d0a1e;color:#f472b6;font-size:.8rem;">🌸 粉樱</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="gold" style="display:none"><span id="bc-t-gold" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #d4891a;background:#1a1000;color:#F5A623;font-size:.8rem;">✦ 热忱黄</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="blue" style="display:none"><span id="bc-t-blue" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #3b82f6;background:#0a1628;color:#3b82f6;font-size:.8rem;">💙 深海蓝</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="star" checked style="display:none" onchange="updateThemeUI()"><span id="bc-t-star" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:3px solid #F5A623;background:#F5A623;color:#0d0c08;font-size:.8rem;font-weight:700;transition:all .2s;">🌟 星空</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="pink" style="display:none" onchange="updateThemeUI()"><span id="bc-t-pink" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #f472b6;background:transparent;color:#f472b6;font-size:.8rem;transition:all .2s;">🌸 粉樱</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="gold" style="display:none" onchange="updateThemeUI()"><span id="bc-t-gold" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #d4891a;background:transparent;color:#F5A623;font-size:.8rem;transition:all .2s;">✦ 热忱黄</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="blue" style="display:none" onchange="updateThemeUI()"><span id="bc-t-blue" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #3b82f6;background:transparent;color:#3b82f6;font-size:.8rem;transition:all .2s;">💙 深海蓝</span></label>
     </div>
     <button onclick="genBdayCard()" class="btn-primary ripple-host" style="padding:.6rem 2rem;">生成贺卡</button>
   </div>
@@ -3269,6 +3269,21 @@ document.getElementById("share-fab").addEventListener("click",()=>{
 
 /* ══ console 彩蛋 ══ */
 /* ══ 生日贺卡 Canvas ══ */
+const THEME_STYLES={
+  star:{bg:"#F5A623",color:"#0d0c08",border:"3px solid #F5A623"},
+  pink:{bg:"#f472b6",color:"#fff",border:"3px solid #f472b6"},
+  gold:{bg:"#d4891a",color:"#fff",border:"3px solid #d4891a"},
+  blue:{bg:"#3b82f6",color:"#fff",border:"3px solid #3b82f6"},
+};
+function updateThemeUI(){
+  const val=(document.querySelector('input[name="bc-theme"]:checked')||{value:"star"}).value;
+  ["star","pink","gold","blue"].forEach(k=>{
+    const el=document.getElementById("bc-t-"+k);
+    if(!el) return;
+    if(k===val){ el.style.background=THEME_STYLES[k].bg; el.style.color=THEME_STYLES[k].color; el.style.border=THEME_STYLES[k].border; el.style.fontWeight="700"; el.style.transform="scale(1.08)"; }
+    else{ el.style.background="transparent"; el.style.color=el.style.borderColor||""; el.style.border="2px solid"; el.style.fontWeight="400"; el.style.transform=""; }
+  });
+}
 function genBdayCard(){
   const name=document.getElementById("bc-name").value.trim()||"蟹黄堡粉丝";
   const msg=document.getElementById("bc-msg").value.trim()||"生日快乐！";
