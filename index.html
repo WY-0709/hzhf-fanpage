@@ -3619,11 +3619,10 @@ let sharedDanmu=[];
 let danmuX=0;
 function addDanmuToTrack(t,color){
   const track=document.getElementById("danmu-track");
-  if(!track) return;
+  if(!track) return null;
   const span=document.createElement("span");
   span.textContent=t;
   span.style.cssText=`font-size:.85rem;font-weight:700;color:${color||"#f472b6"};flex-shrink:0;`;
-  // 找到当前可见位置后的第一个元素插入
   const children=track.children;
   let insertBefore=null;
   for(let i=0;i<children.length;i++){
@@ -3631,6 +3630,7 @@ function addDanmuToTrack(t,color){
     if(rect.left>window.innerWidth){ insertBefore=children[i]; break; }
   }
   insertBefore ? track.insertBefore(span,insertBefore) : track.appendChild(span);
+  return span;
 }
 
 (function initDanmuBanner(){
@@ -3668,24 +3668,31 @@ function sendCustomDanmu(){
   if(BAD.some(w=>t.includes(w))){ inp.value=""; return; }
   if(t.length>30){ inp.value=""; return; }
   inp.value="";
-  addDanmuToTrack("💬 "+t, DANMU_COLORS[Math.floor(Math.random()*DANMU_COLORS.length)]);
-  // 写入 JSONBin
+  const color=DANMU_COLORS[Math.floor(Math.random()*DANMU_COLORS.length)];
+  const span=addDanmuToTrack("💬 "+t, color);
   sharedDanmu.push(t);
   if(sharedDanmu.length>100) sharedDanmu.shift();
-  fetch(WORKER_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{});
 
-  // 弹出气泡，让用户确认看到自己发的内容
+  // 撤回按钮（5秒内可撤回）
   let bubble=document.getElementById("danmu-bubble");
   if(!bubble){
     bubble=document.createElement("div");
     bubble.id="danmu-bubble";
-    bubble.style.cssText="position:fixed;bottom:56px;left:50%;transform:translateX(-50%);background:#f472b6;color:#fff;border-radius:9999px;padding:.35rem 1.1rem;font-size:.82rem;font-weight:700;z-index:600;pointer-events:none;transition:opacity .4s;white-space:nowrap;box-shadow:0 4px 14px rgba(244,114,182,.45);";
+    bubble.style.cssText="position:fixed;bottom:56px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;border-radius:9999px;padding:.35rem 1.1rem;font-size:.82rem;font-weight:700;z-index:600;transition:opacity .4s;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer;border:1px solid rgba(245,166,35,.4);";
     document.body.appendChild(bubble);
   }
-  bubble.textContent="💬 "+t;
+  let countdown=5;
+  bubble.textContent=`撤回「${t}」(${countdown}s)`;
   bubble.style.opacity="1";
-  clearTimeout(bubble._t);
-  bubble._t=setTimeout(()=>bubble.style.opacity="0",2200);
+  clearTimeout(bubble._t); clearInterval(bubble._iv);
+  bubble._iv=setInterval(()=>{ countdown--; if(countdown>0){ bubble.textContent=`撤回「${t}」(${countdown}s)`; } else { clearInterval(bubble._iv); bubble.style.opacity="0"; // 超时才写入
+    fetch(WORKER_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{}); } },1000);
+  bubble.onclick=()=>{
+    clearInterval(bubble._iv); bubble.style.opacity="0";
+    if(span&&span.parentNode) span.parentNode.removeChild(span);
+    sharedDanmu=sharedDanmu.filter(m=>m!==t);
+    bubble.onclick=null;
+  };
 }
 
 // ── 背景装饰 🐶🍔 ──
