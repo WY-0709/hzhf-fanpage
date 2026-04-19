@@ -3312,7 +3312,7 @@ function genBdayCard(){
     });
   }
   if(!btn)return;
-  btn.addEventListener("click",()=>overlay.classList.add("hide"));
+  btn.addEventListener("click",()=>{overlay.classList.add("hide");window.scrollTo(0,0);});
 })();
 
 /* ══ 爱意汇聚地图 ══ */
