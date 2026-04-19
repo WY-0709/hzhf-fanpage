@@ -303,11 +303,10 @@
     .btn-outline:hover { border-color: var(--yellow); box-shadow: 0 0 16px #F5C40033; }
 
     .scroll-hint {
-      position: absolute; bottom: 1.2rem;
       display: flex; flex-direction: column; align-items: center; gap: .3rem;
       color: var(--muted); font-size: .72rem; letter-spacing: .1em;
       animation: bounce 2.4s ease-in-out infinite;
-      z-index: 1; pointer-events: none;
+      margin-top: 1.2rem; pointer-events: none;
     }
     .scroll-hint::after { content:"↓"; font-size:1.1rem; color:var(--yellow); }
     @keyframes bounce {
