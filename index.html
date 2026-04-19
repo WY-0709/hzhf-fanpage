@@ -3582,7 +3582,7 @@ function sendCustomDanmu(){
   const inp=document.getElementById("danmu-input");
   const t=inp.value.trim();
   if(!t) return;
-  const BAD=["广告","微信","加我","二维码","私信","推广","代购","刷单","兼职","赚钱"];
+  const BAD=["广告","微信","加我","二维码","私信","推广","代购","刷单","兼职","赚钱","丑","难听","垃圾","滚","死","傻","蠢","烂"];
   if(BAD.some(w=>t.includes(w))){ inp.value=""; return; }
   if(t.length>30){ inp.value=""; return; }
   inp.value="";
