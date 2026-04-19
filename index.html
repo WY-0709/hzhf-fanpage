@@ -3350,7 +3350,7 @@ function genBdayCard(){
   const el=document.getElementById("like-count");
   const btn=document.getElementById("like-btn");
   // 读取共享计数
-  fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}`)
+  fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/`)
     .then(r=>r.json()).then(d=>{ if(el&&d.count!=null) el.textContent=Number(d.count).toLocaleString(); })
     .catch(()=>{});
 
