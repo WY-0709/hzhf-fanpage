@@ -3288,45 +3288,94 @@ function genBdayCard(){
   const name=document.getElementById("bc-name").value.trim()||"蟹黄堡粉丝";
   const msg=document.getElementById("bc-msg").value.trim()||"生日快乐！";
   const theme=(document.querySelector('input[name="bc-theme"]:checked')||{value:"star"}).value;
-  const themes={
-    star:{bg:["#0d1b4b","#1a0533"],accent:"#F5A623",sub:"rgba(255,255,255,.85)",name:"#f472b6",deco:"✦"},
-    pink:{bg:["#2d0a1e","#1a0030"],accent:"#f472b6",sub:"rgba(255,220,240,.9)",name:"#F5A623",deco:"🌸"},
-    gold:{bg:["#1a1000","#2a1500"],accent:"#F5A623",sub:"rgba(255,240,200,.9)",name:"#fff",deco:"✦"},
-    blue:{bg:["#0a1628","#001040"],accent:"#3b82f6",sub:"rgba(200,220,255,.9)",name:"#f472b6",deco:"💙"},
-  };
-  const t=themes[theme]||themes.star;
   const cv=document.getElementById("bc-canvas");
   cv.width=600; cv.height=340; cv.style.display="block";
   const ctx=cv.getContext("2d");
-  const g=ctx.createLinearGradient(0,0,600,340);
-  g.addColorStop(0,t.bg[0]); g.addColorStop(1,t.bg[1]);
-  ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
-  for(let i=0;i<60;i++){
-    ctx.beginPath();
-    ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.5+.5,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,255,255,${Math.random()*.6+.2})`; ctx.fill();
+
+  function wrapText(text,x,y,maxW,lineH,align){
+    ctx.textAlign=align||"center";
+    let line="";
+    for(const ch of text){
+      const test=line+ch;
+      if(ctx.measureText(test).width>maxW){ctx.fillText(line,x,y);line=ch;y+=lineH;}
+      else line=test;
+    }
+    if(line) ctx.fillText(line,x,y);
   }
-  ctx.textAlign="center";
-  ctx.font="bold 38px 'Playfair Display',serif";
-  ctx.fillStyle=t.accent; ctx.fillText("黄子弘凡 Lars",300,80);
-  ctx.font="18px 'PingFang SC',sans-serif";
-  ctx.fillStyle=t.sub; ctx.fillText("4.21 · 二十七岁生日快乐",300,120);
-  ctx.font="15px 'PingFang SC',sans-serif";
-  ctx.fillStyle=t.name; ctx.fillText(`来自：${name}`,300,175);
-  const maxW=480; let line=""; let y=215;
-  ctx.font="14px 'PingFang SC',sans-serif"; ctx.fillStyle=t.sub;
-  for(const ch of msg){
-    const test=line+ch;
-    if(ctx.measureText(test).width>maxW){ctx.fillText(line,300,y);line=ch;y+=22;}
-    else line=test;
+
+  if(theme==="star"){
+    // 星空：居中，深蓝紫渐变，金色大标题
+    const g=ctx.createLinearGradient(0,0,600,340);
+    g.addColorStop(0,"#0d1b4b"); g.addColorStop(1,"#2d0550");
+    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
+    for(let i=0;i<80;i++){
+      ctx.beginPath(); ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.8+.3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${Math.random()*.7+.2})`; ctx.fill();
+    }
+    ctx.textAlign="center";
+    ctx.font="bold 42px 'Playfair Display',serif"; ctx.fillStyle="#F5A623"; ctx.fillText("黄子弘凡 Lars",300,75);
+    ctx.font="16px sans-serif"; ctx.fillStyle="rgba(255,255,255,.7)"; ctx.fillText("✦ 4.21 · 二十七岁生日快乐 ✦",300,112);
+    ctx.font="bold 14px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,300,160);
+    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(255,255,255,.8)";
+    wrapText(msg,300,195,480,22,"center");
+    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(255,255,255,.25)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",300,325);
+
+  } else if(theme==="pink"){
+    // 粉樱：左对齐，粉色系，花瓣装饰
+    const g=ctx.createLinearGradient(0,0,600,340);
+    g.addColorStop(0,"#fff0f6"); g.addColorStop(1,"#fce4f0");
+    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
+    ["🌸","🌸","🌸","🌸","🌸","🌸"].forEach(()=>{
+      ctx.font=`${18+Math.random()*18}px sans-serif`;
+      ctx.globalAlpha=Math.random()*.25+.08;
+      ctx.fillText("🌸",Math.random()*600,Math.random()*340);
+    });
+    ctx.globalAlpha=1;
+    ctx.fillStyle="#c2185b"; ctx.fillRect(0,0,6,340);
+    ctx.textAlign="left";
+    ctx.font="bold 36px 'Playfair Display',serif"; ctx.fillStyle="#c2185b"; ctx.fillText("黄子弘凡 Lars",30,70);
+    ctx.font="14px sans-serif"; ctx.fillStyle="#ad1457"; ctx.fillText("4.21 · 二十七岁生日快乐",30,100);
+    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,30,140);
+    ctx.font="13px sans-serif"; ctx.fillStyle="#5d1a35";
+    wrapText(msg,30,175,540,22,"left");
+    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(180,80,120,.4)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",30,320);
+
+  } else if(theme==="gold"){
+    // 热忱黄：纯黑底，超大黄色字，极简
+    ctx.fillStyle="#0a0800"; ctx.fillRect(0,0,600,340);
+    ctx.fillStyle="#F5A623"; ctx.fillRect(0,300,600,3);
+    ctx.textAlign="center";
+    ctx.font="bold 52px 'Playfair Display',serif"; ctx.fillStyle="#F5A623"; ctx.fillText("Lars",300,90);
+    ctx.font="bold 22px sans-serif"; ctx.fillStyle="#fff"; ctx.fillText("黄子弘凡 · 二十七岁",300,130);
+    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(245,166,35,.7)"; ctx.fillText("4.21 生日快乐",300,162);
+    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#F5A623"; ctx.fillText("来自："+name,300,200);
+    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(255,255,255,.75)";
+    wrapText(msg,300,228,480,22,"center");
+    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(245,166,35,.2)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",300,322);
+
+  } else {
+    // 深海蓝：右对齐，竖线装饰
+    const g=ctx.createLinearGradient(0,0,600,340);
+    g.addColorStop(0,"#001233"); g.addColorStop(1,"#023e8a");
+    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
+    ctx.fillStyle="rgba(96,165,250,.15)"; ctx.fillRect(560,0,40,340);
+    ctx.fillStyle="#3b82f6"; ctx.fillRect(554,0,3,340);
+    for(let i=0;i<40;i++){
+      ctx.beginPath(); ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.2+.3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(147,197,253,${Math.random()*.5+.1})`; ctx.fill();
+    }
+    ctx.textAlign="right";
+    ctx.font="bold 38px 'Playfair Display',serif"; ctx.fillStyle="#93c5fd"; ctx.fillText("黄子弘凡 Lars",540,70);
+    ctx.font="14px sans-serif"; ctx.fillStyle="rgba(255,255,255,.65)"; ctx.fillText("4.21 · 二十七岁生日快乐",540,105);
+    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,540,148);
+    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(200,220,255,.85)";
+    wrapText(msg,540,182,500,22,"right");
+    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(255,255,255,.2)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",540,322);
   }
-  if(line) ctx.fillText(line,300,y);
-  ctx.font="11px sans-serif"; ctx.fillStyle="rgba(255,255,255,.3)";
-  ctx.fillText("蟹黄堡粉丝应援页 · 非官方",300,320);
+
   document.getElementById("bc-hint").style.display="block";
   const dl=document.getElementById("bc-download");
-  dl.href=cv.toDataURL("image/png");
-  dl.style.display="block";
+  dl.href=cv.toDataURL("image/png"); dl.style.display="block";
   document.getElementById("bc-hint2").style.display="block";
 }
 
