@@ -3671,6 +3671,7 @@ function sendCustomDanmu(){
   const color=DANMU_COLORS[Math.floor(Math.random()*DANMU_COLORS.length)];
   const span=addDanmuToTrack("💬 "+t, color);
   sharedDanmu.push(t);
+  const danmuIdx=sharedDanmu.length-1;
   if(sharedDanmu.length>100) sharedDanmu.shift();
 
   // 撤回按钮（5秒内可撤回）
@@ -3690,7 +3691,7 @@ function sendCustomDanmu(){
   bubble.onclick=()=>{
     clearInterval(bubble._iv); bubble.style.opacity="0";
     if(span&&span.parentNode) span.parentNode.removeChild(span);
-    sharedDanmu=sharedDanmu.filter(m=>m!==t);
+    sharedDanmu=sharedDanmu.filter((_,i)=>i!==danmuIdx);
     bubble.onclick=null;
   };
 }
