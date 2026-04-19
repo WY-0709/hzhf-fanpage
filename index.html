@@ -3668,7 +3668,7 @@ function sendCustomDanmu(){
   if(BAD.some(w=>t.includes(w))){ inp.value=""; return; }
   if(t.length>30){ inp.value=""; return; }
   inp.value="";
-  addDanmuToTrack("💬 "+t);
+  addDanmuToTrack("💬 "+t, DANMU_COLORS[Math.floor(Math.random()*DANMU_COLORS.length)]);
   // 写入 JSONBin
   sharedDanmu.push(t);
   if(sharedDanmu.length>100) sharedDanmu.shift();
