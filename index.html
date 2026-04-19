@@ -267,9 +267,10 @@
     }
     .hero-pill {
       padding: .35rem .9rem; border-radius: 9999px;
-      border: 1px solid var(--border);
-      font-size: .8rem; color: #5a4a3a;
-      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(232,160,0,0.5);
+      font-size: .8rem; color: #2a1e0e;
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(4px);
     }
     .hero-pill strong { color: var(--yellow); }
 
@@ -302,11 +303,11 @@
     .btn-outline:hover { border-color: var(--yellow); box-shadow: 0 0 16px #F5C40033; }
 
     .scroll-hint {
-      position: absolute; bottom: 2rem;
+      position: absolute; bottom: 1.2rem;
       display: flex; flex-direction: column; align-items: center; gap: .3rem;
       color: var(--muted); font-size: .72rem; letter-spacing: .1em;
       animation: bounce 2.4s ease-in-out infinite;
-      z-index: 2; pointer-events: none;
+      z-index: 1; pointer-events: none;
     }
     .scroll-hint::after { content:"↓"; font-size:1.1rem; color:var(--yellow); }
     @keyframes bounce {
