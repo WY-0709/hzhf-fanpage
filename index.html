@@ -127,7 +127,7 @@
     #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;display:none;}
 
     /* ── 悬浮分享球 ── */
-    #share-fab{position:fixed;bottom:80px;right:22px;z-index:600;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#d4891a);box-shadow:0 4px 18px rgba(232,160,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform .2s;}
+    #share-fab{position:fixed;bottom:4rem;right:22px;z-index:600;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#d4891a);box-shadow:0 4px 18px rgba(232,160,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform .2s;}
     #share-fab:hover{transform:scale(1.12);}
     #share-fab svg{width:22px;height:22px;fill:#fff;}
     #share-toast{position:fixed;bottom:142px;right:22px;background:#1a1a2e;color:#F5A623;border-radius:10px;padding:.55rem 1rem;font-size:.82rem;z-index:601;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
@@ -311,6 +311,11 @@
       display: flex; flex-direction: column; gap: .5rem;
     }
     @media(max-width:768px){ #scroll-fab{display:none!important;} }
+    @media(max-width:375px){
+      #danmu-input{width:70px;}
+      .hero-pill{font-size:.72rem;padding:.25rem .6rem;}
+      .achieve-grid{grid-template-columns:1fr;}
+    }
     @media(max-width:600px){
       #nav-toggle{display:block!important;}
       #nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(13,12,8,.97);flex-direction:column;padding:.8rem 1.2rem;gap:.2rem;z-index:999;border-bottom:1px solid rgba(245,166,35,.2);}
@@ -1409,8 +1414,8 @@
   <div style="position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(90deg,rgba(13,27,75,.97),transparent);pointer-events:none;z-index:3;"></div>
   <div style="position:absolute;right:160px;top:0;bottom:0;width:60px;background:linear-gradient(270deg,rgba(13,27,75,.97),transparent);pointer-events:none;z-index:3;"></div>
   <div style="position:absolute;right:0;display:flex;align-items:center;gap:.4rem;padding:0 .6rem;z-index:4;background:rgba(13,27,75,.97);">
-    <input id="danmu-input" placeholder="发祝福…" maxlength="20" style="width:100px;padding:.25rem .6rem;border-radius:9999px;border:1px solid rgba(245,166,35,.4);background:rgba(255,255,255,.08);font-size:.75rem;color:#fff;outline:none;" onkeydown="if(event.key==='Enter')sendCustomDanmu()">
-    <button onclick="sendCustomDanmu()" style="padding:.25rem .7rem;border-radius:9999px;background:#F5A623;border:none;color:#0d0c08;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;">发送</button>
+    <input id="danmu-input" placeholder="发祝福…" maxlength="30" style="width:120px;padding:.25rem .6rem;border-radius:9999px;border:1px solid rgba(245,166,35,.4);background:rgba(255,255,255,.08);font-size:.75rem;color:#fff;outline:none;" onkeydown="if(event.key==='Enter')sendCustomDanmu()">
+    <button onclick="sendCustomDanmu()" style="min-height:44px;padding:.25rem .7rem;border-radius:9999px;background:#F5A623;border:none;color:#0d0c08;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;">发送</button>
   </div>
 </div>
 
