@@ -1380,6 +1380,13 @@
   <div style="display:flex;flex-direction:column;gap:.7rem;align-items:center;">
     <input id="bc-name" placeholder="你的名字 / 昵称" style="width:100%;max-width:340px;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);font-size:.95rem;color:var(--text);" />
     <textarea id="bc-msg" placeholder="写下你的祝福…" rows="3" style="width:100%;max-width:340px;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);font-size:.95rem;color:var(--text);resize:none;"></textarea>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
+      <span style="font-size:.85rem;color:var(--muted);align-self:center;">主题：</span>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="star" checked style="display:none"><span id="bc-t-star" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #F5A623;background:#0d1b4b;color:#F5A623;font-size:.8rem;">🌟 星空</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="pink" style="display:none"><span id="bc-t-pink" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #f472b6;background:#2d0a1e;color:#f472b6;font-size:.8rem;">🌸 粉樱</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="gold" style="display:none"><span id="bc-t-gold" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #d4891a;background:#1a1000;color:#F5A623;font-size:.8rem;">✦ 热忱黄</span></label>
+      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="blue" style="display:none"><span id="bc-t-blue" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #3b82f6;background:#0a1628;color:#3b82f6;font-size:.8rem;">💙 深海蓝</span></label>
+    </div>
     <button onclick="genBdayCard()" class="btn-primary ripple-host" style="padding:.6rem 2rem;">生成贺卡</button>
   </div>
   <canvas id="bc-canvas" style="display:none;margin:1.2rem auto 0;border-radius:14px;max-width:100%;box-shadow:0 8px 32px rgba(0,0,0,.25);"></canvas>
@@ -3247,13 +3254,20 @@ document.getElementById("share-fab").addEventListener("click",()=>{
 function genBdayCard(){
   const name=document.getElementById("bc-name").value.trim()||"蟹黄堡粉丝";
   const msg=document.getElementById("bc-msg").value.trim()||"生日快乐！";
+  const theme=(document.querySelector('input[name="bc-theme"]:checked')||{value:"star"}).value;
+  const themes={
+    star:{bg:["#0d1b4b","#1a0533"],accent:"#F5A623",sub:"rgba(255,255,255,.85)",name:"#f472b6",deco:"✦"},
+    pink:{bg:["#2d0a1e","#1a0030"],accent:"#f472b6",sub:"rgba(255,220,240,.9)",name:"#F5A623",deco:"🌸"},
+    gold:{bg:["#1a1000","#2a1500"],accent:"#F5A623",sub:"rgba(255,240,200,.9)",name:"#fff",deco:"✦"},
+    blue:{bg:["#0a1628","#001040"],accent:"#3b82f6",sub:"rgba(200,220,255,.9)",name:"#f472b6",deco:"💙"},
+  };
+  const t=themes[theme]||themes.star;
   const cv=document.getElementById("bc-canvas");
   cv.width=600; cv.height=340; cv.style.display="block";
   const ctx=cv.getContext("2d");
   const g=ctx.createLinearGradient(0,0,600,340);
-  g.addColorStop(0,"#0d1b4b"); g.addColorStop(1,"#1a0533");
+  g.addColorStop(0,t.bg[0]); g.addColorStop(1,t.bg[1]);
   ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
-  // 星点
   for(let i=0;i<60;i++){
     ctx.beginPath();
     ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.5+.5,0,Math.PI*2);
@@ -3261,15 +3275,14 @@ function genBdayCard(){
   }
   ctx.textAlign="center";
   ctx.font="bold 38px 'Playfair Display',serif";
-  ctx.fillStyle="#F5A623"; ctx.fillText("黄子弘凡 Lars",300,80);
+  ctx.fillStyle=t.accent; ctx.fillText("黄子弘凡 Lars",300,80);
   ctx.font="18px 'PingFang SC',sans-serif";
-  ctx.fillStyle="rgba(255,255,255,.85)"; ctx.fillText("4.21 · 二十七岁生日快乐",300,120);
+  ctx.fillStyle=t.sub; ctx.fillText("4.21 · 二十七岁生日快乐",300,120);
   ctx.font="15px 'PingFang SC',sans-serif";
-  ctx.fillStyle="#f472b6"; ctx.fillText(`来自：${name}`,300,175);
-  // 换行处理
-  const words=msg; const maxW=480; let line=""; let y=215;
-  ctx.font="14px 'PingFang SC',sans-serif"; ctx.fillStyle="rgba(255,255,255,.8)";
-  for(const ch of words){
+  ctx.fillStyle=t.name; ctx.fillText(`来自：${name}`,300,175);
+  const maxW=480; let line=""; let y=215;
+  ctx.font="14px 'PingFang SC',sans-serif"; ctx.fillStyle=t.sub;
+  for(const ch of msg){
     const test=line+ch;
     if(ctx.measureText(test).width>maxW){ctx.fillText(line,300,y);line=ch;y+=22;}
     else line=test;
