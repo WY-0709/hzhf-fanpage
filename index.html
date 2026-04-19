@@ -3323,7 +3323,7 @@ function genBdayCard(){
   // 读取共享计数
   fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}`)
     .then(r=>r.json()).then(d=>{ if(el&&d.count!=null) el.textContent=Number(d.count).toLocaleString(); })
-    .catch(()=>{ if(el) el.textContent="1,024+"; });
+    .catch(()=>{});
 
   // 经纬度 → canvas 坐标（等矩形投影）
   function ll2xy(lng,lat){
