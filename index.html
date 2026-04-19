@@ -3368,7 +3368,6 @@ function genBdayCard(){
       .then(r=>r.json()).then(d=>{ if(el&&d.count!=null){ el.textContent=Number(d.count).toLocaleString(); el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } })
       .catch(()=>{ if(el){ el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } });
     btn.textContent="✦ 已送出祝福 ♡";
-    setTimeout(()=>{ btn.disabled=false; btn.style.opacity="1"; btn.textContent="✦ 送出祝福"; },3000);
     fetch("https://ipapi.co/json/")
       .then(r=>r.json())
       .then(d=>{ if(d.longitude&&d.latitude){dots.push([+d.longitude,+d.latitude]);render();} else throw 0; })
@@ -3512,13 +3511,15 @@ function saveTestImg(type){
 }
 
 // ── 弹幕 Banner ──
-const DANMU_MSGS=["🐶 Lars 27岁生日快乐！","🍔 蟹黄堡永远在 💛","✦ 跨越山海，听见你的声音","🎵 除了快乐禁止入内","💛 想要就做到，你做到了","🌟 27岁，愿你一直发光","🐶 谢谢你选择了歌唱","🍔 你的快乐是真实的","✨ 从剧院到鸟巢，我们都在","💛 Lars，生日快乐","🎂 27年，刚刚好","🐶 你唱歌的样子好帅","🍔 蟹黄堡的爱跨越山海","🎵 每一首歌都是一封信","✦ 你让我相信热烈是一种活法","💛 Happy Birthday, Lars！","🌟 伯克利到鸟巢，你值得","🐶 谢谢你的音乐陪伴我","🍔 27岁，继续做你自己","✨ 你站在台上的样子让我哭了","🎂 Lars Huang, you are amazing","💛 蟹黄堡爱你一辈子","🐶 生日快乐，希望你永远快乐","🍔 你的声音是我最喜欢的声音","✦ 你让歌声有了重量","🎵 一直唱下去，我们一直听","🌟 お誕生日おめでとう、Lars！","💛 你27岁，我们永远爱你","🐶 除了你，禁止入内","🍔 听见他，就是听见生命力","✨ Joyeux anniversaire, Lars！","🎂 你的每一场演出都是奇迹","💛 谢谢你把快乐带给我们","✦ 27岁，刚好是最好的你","🐶 Lars，你是我见过最努力的人","🍔 生日快乐，继续创造奇迹","🎵 你的歌让我敢于热烈生活","🌟 Feliz cumpleaños, Lars！","💛 蟹黄堡在，你不孤单","🐶 鸟巢的灯光为你而亮","✨ 二十七岁，跨越一切","🍔 你唱的每个字都落进心里","🎂 生日快乐，永远年轻","✦ 생일 축하해요, Lars！","💛 你让我知道认真可以多闪光","🐶 继续歌唱，我们继续爱你","🎵 27岁生日快乐，Lars加油","🌟 谢谢你，让热忱黄有了意义","🍔 Happy 27th Birthday, Lars！","✨ 从今天起，27岁的你更闪耀","🌸 Alles Gute zum Geburtstag, Lars！","💙 Buon compleanno, Lars！","🌺 Parabéns, Lars！","🎊 Gelukkige verjaardag, Lars！","🌙 С днём рождения, Lars！","🎶 Wszystkiego najlepszego, Lars！","🦋 生日快乐 · 사랑해요 Lars","🌈 Grattis på födelsedagen, Lars！","💫 Tillykke med fødselsdagen, Lars！","🎁 生日快乐，你是世界的宝藏"];
+const DANMU_MSGS=["🐶 Lars 27岁生日快乐！","🍔 蟹黄堡永远在 💛","✦ 跨越山海，听见你的声音","🎵 除了快乐禁止入内","💛 你让我相信热烈是一种活法","🌟 お誕生日おめでとう、Lars！","✨ Joyeux anniversaire, Lars！","🌸 Alles Gute zum Geburtstag, Lars！","🌺 Parabéns, Lars！","✦ 생일 축하해요, Lars！"];
 const DANMU_COLORS=["#F5A623","#f472b6","#22c55e","#3b82f6","#a855f7","#fb923c"];
+const DANMU_STORE_KEY="hzhf_danmu_v1";
+function getDanmuList(){ try{ return JSON.parse(localStorage.getItem(DANMU_STORE_KEY)||"[]"); }catch(e){ return []; } }
 (function initDanmuBanner(){
   const track=document.getElementById("danmu-track");
   if(!track) return;
-  // 填充足够多条目
-  const all=[...DANMU_MSGS,...DANMU_MSGS,...DANMU_MSGS];
+  const userMsgs=getDanmuList().map(t=>"💬 "+t);
+  const all=[...DANMU_MSGS,...userMsgs,...DANMU_MSGS,...userMsgs];
   all.forEach((t,i)=>{
     const span=document.createElement("span");
     span.textContent=t;
@@ -3532,7 +3533,6 @@ const DANMU_COLORS=["#F5A623","#f472b6","#22c55e","#3b82f6","#a855f7","#fb923c"]
     track.style.transform=`translateX(${x}px)`;
     requestAnimationFrame(animate);
   }
-  // 复制一份实现无缝循环
   track.innerHTML+=track.innerHTML;
   animate();
 })();
@@ -3541,6 +3541,11 @@ function sendCustomDanmu(){
   const inp=document.getElementById("danmu-input");
   const t=inp.value.trim();
   if(!t) return;
+  // 存入 localStorage
+  const list=getDanmuList();
+  list.push(t);
+  if(list.length>50) list.shift();
+  localStorage.setItem(DANMU_STORE_KEY,JSON.stringify(list));
   const track=document.getElementById("danmu-track");
   const span=document.createElement("span");
   span.textContent="💬 "+t;
