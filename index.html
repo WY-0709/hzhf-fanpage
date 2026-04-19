@@ -1407,6 +1407,7 @@
   <canvas id="bc-canvas" style="display:none;margin:1.2rem auto 0;border-radius:14px;max-width:100%;box-shadow:0 8px 32px rgba(0,0,0,.25);"></canvas>
   <p id="bc-hint" style="display:none;color:var(--muted);font-size:.8rem;margin-top:.6rem;">长按或右键保存图片，发到超话为 Lars 庆生！</p>
   <a id="bc-download" style="display:none;margin:.8rem auto 0;" class="btn btn-primary" download="hzhf-birthday.png">保存贺卡图片</a>
+  <a id="bc-weibo" style="display:none;margin:.4rem auto 0;" class="btn btn-outline" href="https://service.weibo.com/share/share.php?url=https://WY-0709.github.io/hzhf-fanpage&title=4.21+黄子弘凡27岁生日快乐！我为Lars送上祝福🎂+%23黄子弘凡%23&pic=" target="_blank" rel="noopener">分享到微博 ✦</a>
   <p id="bc-hint2" style="display:none;color:var(--muted);font-size:.82rem;margin-top:.8rem;">保存图片后，发到微博超话 <a href="https://weibo.com/p/100808c98f988ea22d7b40caed47951f8eb507/super_index" target="_blank" style="color:var(--yellow);">#黄子弘凡#</a> 为 Lars 庆生！</p>
 </section>
 
@@ -2240,7 +2241,8 @@ function bgmPause(){
 }
 bgmAudio.addEventListener("ended", ()=>{ bgmLoad(bgmIdx+1); bgmAudio.play().catch(()=>{}); });
 bgmAudio.addEventListener("error", ()=>{ bgmLoad(bgmIdx+1); bgmAudio.play().catch(()=>{}); });
-bgmAudio.addEventListener("stalled", ()=>{ setTimeout(()=>{ if(bgmPlaying && bgmAudio.paused){ bgmLoad(bgmIdx+1); bgmAudio.play().catch(()=>{}); } }, 5000); });
+let bgmStalledFlag=false;
+bgmAudio.addEventListener("stalled", ()=>{ if(bgmStalledFlag) return; bgmStalledFlag=true; setTimeout(()=>{ bgmStalledFlag=false; if(bgmPlaying && bgmAudio.paused){ bgmLoad(bgmIdx+1); bgmAudio.play().catch(()=>{}); } }, 5000); });
 bgmBtn.addEventListener("click", ()=>{ bgmPlaying ? bgmPause() : bgmPlay(); });
 
 /* ══ Hero Slideshow ══ */
@@ -3378,6 +3380,7 @@ function genBdayCard(){
   document.getElementById("bc-hint").style.display="block";
   const dl=document.getElementById("bc-download");
   dl.href=cv.toDataURL("image/png"); dl.style.display="block";
+  document.getElementById("bc-weibo").style.display="block";
   document.getElementById("bc-hint2").style.display="block";
 }
 
