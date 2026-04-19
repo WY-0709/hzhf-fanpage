@@ -3527,9 +3527,7 @@ function saveTestImg(type){
 // ── 弹幕 Banner ──
 const DANMU_MSGS=["🐶 Lars 27岁生日快乐！","🍔 蟹黄堡永远在 💛","✦ 跨越山海，听见你的声音","🎵 除了快乐禁止入内","💛 你让我相信热烈是一种活法","🌟 お誕生日おめでとう、Lars！","✨ Joyeux anniversaire, Lars！","🌸 Alles Gute zum Geburtstag, Lars！","🌺 Parabéns, Lars！","✦ 생일 축하해요, Lars！"];
 const DANMU_COLORS=["#F5A623","#f472b6","#22c55e","#3b82f6","#a855f7","#fb923c"];
-const JSONBIN_ID="69e48501856a6821894cd45d";
-const JSONBIN_KEY="$2a$10$4NICt.J3Okl17SPMbP2KqOGWzPZDv2C6BEyHaIsbM9Lucga3XVU7.";
-const JSONBIN_URL=`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+const WORKER_URL="https://hzhf-danmu.wangyi20040709.workers.dev";
 let sharedDanmu=[];
 
 function addDanmuToTrack(t,color){
@@ -3552,7 +3550,7 @@ function addDanmuToTrack(t,color){
     track.appendChild(span);
   });
   // 加载共享弹幕
-  fetch(JSONBIN_URL+"/latest",{headers:{"X-Master-Key":JSONBIN_KEY}})
+  fetch(WORKER_URL,{headers:{"Content-Type":"application/json"}})
     .then(r=>r.json()).then(d=>{
       sharedDanmu=(d.record&&d.record.msgs)||[];
       sharedDanmu.forEach(t=>addDanmuToTrack("💬 "+t));
@@ -3577,7 +3575,7 @@ function sendCustomDanmu(){
   // 写入 JSONBin
   sharedDanmu.push(t);
   if(sharedDanmu.length>100) sharedDanmu.shift();
-  fetch(JSONBIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":JSONBIN_KEY},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{});
+  fetch(WORKER_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{});
 
   // 弹出气泡，让用户确认看到自己发的内容
   let bubble=document.getElementById("danmu-bubble");
