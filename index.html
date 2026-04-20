@@ -93,36 +93,16 @@
     /* ── 滚动进度条 ── */
     #scroll-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#3b82f6,#F5A623,#f472b6);z-index:8888;transition:width .08s linear;border-radius:0 2px 2px 0;}
 
-    /* ── 进度环 ── */
-    #bday-ring{display:flex;align-items:center;gap:.5rem;}
-    #bday-ring svg{width:44px;height:44px;transform:rotate(-90deg);}
-    #bday-ring circle{fill:none;stroke-width:4;}
-    #ring-bg{stroke:rgba(255,255,255,.1);}
-    #ring-fg{stroke:#F5A623;stroke-linecap:round;transition:stroke-dashoffset .5s;}
-    #ring-label{position:absolute;font-size:.55rem;color:#F5A623;font-weight:700;}
-    #ring-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+    
 
     /* ── 飘屏弹幕 ── */
     .danmu{position:fixed;white-space:nowrap;font-size:.9rem;font-weight:600;pointer-events:none;z-index:8999;animation:danmu-fly linear forwards;}
     @keyframes danmu-fly{from{transform:translateX(110vw)}to{transform:translateX(-110vw)}}
 
     /* ── 生日快乐模式 ── */
-    body.bday-mode #bday-banner{background:linear-gradient(90deg,#7c3aed,#db2777,#F5A623);}
     body.bday-mode .btn-primary{background:#f472b6;border-color:#f472b6;}
 
-    /* ── 生日倒计时横幅 ── */
-    #bday-banner{position:sticky;top:58px;left:0;right:0;z-index:97;background:linear-gradient(90deg,#1a0533,#0d1b4b);padding:.45rem 1rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;}
-    #bday-banner.hide{display:none;}
-    .bday-label{color:#F5A623;font-size:.88rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;}
-    .bday-units{display:flex;gap:.5rem;align-items:center;}
-    .bday-unit{text-align:center;min-width:44px;background:rgba(255,255,255,.08);border-radius:8px;padding:.25rem .4rem;}
-    .bday-unit span:first-child{display:block;font-size:1.3rem;font-weight:700;color:#fff;line-height:1;}
-    .bday-unit span:first-child.loading{animation:pulse 1s ease-in-out infinite;color:rgba(255,255,255,.4);}
-    .bday-unit span:last-child{display:block;font-size:.62rem;color:rgba(255,255,255,.5);margin-top:.1rem;}
-    .bday-sep{color:#F5A623;font-size:1.1rem;font-weight:700;margin-bottom:.2rem;}
-    #bday-live{color:#22c55e;font-size:.9rem;font-weight:700;animation:pulse 1.2s ease-in-out infinite;}
-    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-
+    
     /* ── 彩带 ── */
     #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;display:none;}
 
@@ -1019,27 +999,7 @@
 <!-- 滚动进度条 -->
 <div id="scroll-bar"></div>
 
-<!-- 生日倒计时横幅 -->
-<div id="bday-banner">
-  <span class="bday-label">距 Lars 27岁生日</span>
-  <div id="ring-wrap">
-    <svg id="bday-ring" viewBox="0 0 44 44">
-      <circle id="ring-bg" cx="22" cy="22" r="18"/>
-      <circle id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="113"/>
-    </svg>
-    <span id="ring-label">0%</span>
-  </div>
-  <div class="bday-units">
-    <div class="bday-unit"><span id="bd-d" class="loading">--</span><span>天</span></div>
-    <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-h" class="loading">--</span><span>时</span></div>
-    <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-m" class="loading">--</span><span>分</span></div>
-    <span class="bday-sep">:</span>
-    <div class="bday-unit"><span id="bd-s" class="loading">--</span><span>秒</span></div>
-  </div>
-  <span id="bday-live" style="display:none"><span aria-hidden="true">🎉</span> 生日快乐！</span>
-</div>
+
 
 <!-- 彩带画布 -->
 <canvas id="confetti-layer"></canvas>
@@ -3169,69 +3129,6 @@ document.querySelectorAll(".tl-item,.album-card,.musical-card,.review-card,.awar
     const s=document.documentElement;
     bar.style.width=(s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+"%";
   },{passive:true});
-})();
-
-/* ══ 生日倒计时 ══ */
-(function(){
-  const live=document.getElementById("bday-live");
-  const ringFg=document.getElementById("ring-fg");
-  const ringLabel=document.getElementById("ring-label");
-  const CIRC=113;
-  // 进度：从上一个生日到下一个生日
-  function updateRing(diff,total){
-    const pct=Math.max(0,Math.min(1,1-diff/total));
-    const offset=CIRC*(1-pct);
-    ringFg.style.strokeDashoffset=offset;
-    ringLabel.textContent=Math.round(pct*100)+"%";
-  }
-  function tick(){
-    const now=new Date();
-    const target=new Date(now.getFullYear(),3,21);
-    if(now>=target) target.setFullYear(target.getFullYear()+1);
-    const prev=new Date(target); prev.setFullYear(prev.getFullYear()-1);
-    const total=target-prev;
-    const diff=target-now;
-    if(diff<=0){
-      ["bd-d","bd-h","bd-m","bd-s"].forEach(id=>document.getElementById(id).textContent="00");
-      live.style.display="inline";
-      ringFg.style.strokeDashoffset=0;
-      ringLabel.textContent="✦";
-      activateBdayMode();
-      launchConfetti();
-      return;
-    }
-    updateRing(diff,total);
-    document.getElementById("bd-d").textContent=String(Math.floor(diff/86400000)).padStart(2,"0");
-    document.getElementById("bd-h").textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,"0");
-    document.getElementById("bd-m").textContent=String(Math.floor(diff%3600000/60000)).padStart(2,"0");
-    document.getElementById("bd-s").textContent=String(Math.floor(diff%60000/1000)).padStart(2,"0");
-    ["bd-d","bd-h","bd-m","bd-s"].forEach(id=>document.getElementById(id).classList.remove("loading"));
-  }
-  tick(); setInterval(tick,1000);
-
-  function activateBdayMode(){
-    document.body.classList.add("bday-mode");
-    document.querySelectorAll(".btn-primary").forEach(b=>{ if(b.textContent.includes("打开")||b.textContent.includes("探索")) b.textContent="🎉 一起庆祝"; });
-    startDanmu();
-  }
-
-  const DANMU_TEXTS=["Lars 27岁生日快乐！","蟹黄堡永远在 💛","跨越山海听见你","4.21 生日快乐","除了快乐禁止入内 🎵","27岁 继续发光✨","Lars 我们爱你","鸟巢见过你 更爱你了"];
-  function startDanmu(){
-    let i=0;
-    setInterval(()=>{
-      const d=document.createElement("div");
-      d.className="danmu";
-      d.textContent=DANMU_TEXTS[i%DANMU_TEXTS.length];
-      d.style.cssText=`top:${10+Math.random()*80}vh;color:${["#F5A623","#f472b6","#22c55e","#3b82f6","#a855f7"][Math.floor(Math.random()*5)]};animation-duration:${6+Math.random()*4}s;`;
-      document.body.appendChild(d);
-      setTimeout(()=>d.remove(),11000);
-      i++;
-    },1200);
-  }
-
-  // 4.21当天立即激活
-  const now=new Date();
-  if(now.getMonth()===3&&now.getDate()===21) activateBdayMode();
 })();
 
 /* ══ 彩带 ══ */
