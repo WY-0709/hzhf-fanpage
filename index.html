@@ -3328,13 +3328,11 @@ function genBdayCard(){
     [115.9,25.8],[116.4,39.9],[121.5,31.2],[104.1,30.6],[113.3,23.1],
     [-74,40.7],[-0.1,51.5],[139.7,35.7],[151.2,-33.9],[126.9,37.6]
   ];
-  const VOTED_KEY="hzhf_voted_v2";
-  const COUNTER_NS="hzhf-fanpage";
-  const COUNTER_KEY="wishes";
+  const COUNTER_URL="https://1423398694-5wveexjpxx.ap-guangzhou.tencentscf.com";
   const el=document.getElementById("like-count");
   const btn=document.getElementById("like-btn");
   // 读取共享计数
-  fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/`)
+  fetch(COUNTER_URL)
     .then(r=>r.json()).then(d=>{ if(el&&d.count!=null) el.textContent=Number(d.count).toLocaleString(); })
     .catch(()=>{});
 
@@ -3379,7 +3377,7 @@ function genBdayCard(){
 
   if(btn) btn.addEventListener("click",()=>{
     btn.disabled=true; btn.style.opacity=".6";
-    fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/up`)
+    fetch(COUNTER_URL, {method:"POST"})
       .then(r=>r.json()).then(d=>{ if(el&&d.count!=null){ el.textContent=Number(d.count).toLocaleString(); el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } })
       .catch(()=>{ if(el){ el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } });
     btn.textContent="✦ 已送出祝福 ♡";
