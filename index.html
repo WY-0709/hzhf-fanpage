@@ -956,6 +956,24 @@
       /* 弹幕输入区 */
       #danmu-input{width:calc(100vw - 220px);min-width:80px;max-width:160px;}
     }
+    /* ── Micro-interactions ── */
+    .album-card,.musical-card,.review-card,.edu-card,.social-card,.award-item,.tl-item,.cg-link{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+    .album-card:hover,.musical-card:hover,.review-card:hover,.edu-card:hover,.social-card:hover{transform:translateY(-4px) scale(1.02);}
+    .award-item:hover,.tl-item:hover{transform:translateY(-2px) scale(1.015);}
+    .btn-primary,.btn-outline,button{transition:transform .15s ease,box-shadow .15s ease,background .15s ease;}
+    .btn-primary:hover,.btn-outline:hover{transform:scale(1.05);}
+    /* ── Glassmorphism ── */
+    .album-card,.musical-card,.review-card,.edu-card,.social-card{
+      background:rgba(255,255,255,0.55);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.4);
+      box-shadow:0 4px 24px rgba(0,0,0,0.08);
+    }
+    .album-card:hover,.musical-card:hover,.review-card:hover,.edu-card:hover,.social-card:hover{
+      background:rgba(255,255,255,0.72);
+      box-shadow:0 12px 40px rgba(245,166,35,0.15);
+    }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
