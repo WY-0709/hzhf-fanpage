@@ -3900,13 +3900,15 @@ document.querySelectorAll(".tl-item,.album-card,.musical-card,.review-card,.awar
 (function(){
   const bar=document.getElementById("loader-bar");
   const loader=document.getElementById("loader");
-  let p=0;
+  let p=0, done=false;
+  function hideLoader(){ if(done)return; done=true; bar.style.width="100%"; clearInterval(iv); setTimeout(()=>loader.classList.add("hide"),400); }
   const iv=setInterval(()=>{
     p+=Math.random()*18+4;
     if(p>=100){p=100;clearInterval(iv);setTimeout(()=>loader.classList.add("hide"),300);}
     bar.style.width=p+"%";
   },120);
-  window.addEventListener("load",()=>{p=100;bar.style.width="100%";clearInterval(iv);setTimeout(()=>loader.classList.add("hide"),400);});
+  window.addEventListener("load", hideLoader);
+  setTimeout(hideLoader, 5000);
 })();
 
 /* ══ 滚动进度条 ══ */
