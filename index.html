@@ -1328,16 +1328,15 @@
     #danmu-send,
     #share-fab,
     .sfab-btn,
-    #back-top,
-    #nav-toggle,
-    #bgm-btn {
+    #back-top {
       min-height: 0;
     }
+    #nav-toggle, #bgm-btn { min-height: 44px; padding: .4rem .8rem; }
     .btn{padding:.8rem 2rem;}
     #ticket-enter{min-height:44px;padding:.8rem 1.8rem;}
     /* 底部弹幕条：避免「发送」被全局 44px 按钮规则撑出条外，与回顶/分享叠在一起 */
     #danmu-banner.danmu-bar{
-      position: sticky;
+      position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
@@ -1448,7 +1447,7 @@
       /* 地图自适应 */
       #map-canvas{height:auto;}
       /* 弹幕输入区 */
-      #danmu-input{width:calc(100vw - 200px);min-width:72px;max-width:130px;}
+      #danmu-input{width:calc(100vw - 200px);min-width:100px;max-width:160px;}
     }
     /* ── Micro-interactions ── */
     .album-card,.musical-card,.review-card,.edu-card,.social-card,.award-item,.tl-item,.cg-link{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
