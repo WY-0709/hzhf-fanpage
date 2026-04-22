@@ -109,13 +109,31 @@
     #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;display:none;}
 
     /* ── 悬浮分享球 ── */
-    #share-fab{position:fixed;bottom:4rem;right:22px;z-index:600;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#d4891a);box-shadow:0 4px 18px rgba(232,160,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform .2s;}
+    #share-fab{
+      position:fixed;
+      z-index:600;
+      right:var(--fab-edge);
+      bottom:calc(var(--danmu-bar-h) + 12px + var(--fab-bottom-safe));
+      width:52px;height:52px;border-radius:50%;
+      background:linear-gradient(135deg,#F5A623,#d4891a);box-shadow:0 4px 18px rgba(232,160,0,.5);
+      display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform .2s;
+      min-height:unset;
+    }
     #share-fab:hover{transform:scale(1.12);}
     #share-fab svg{width:22px;height:22px;fill:#fff;}
-    #share-toast{position:fixed;bottom:7.5rem;right:22px;background:#1a1a2e;color:#F5A623;border-radius:10px;padding:.55rem 1rem;font-size:.82rem;z-index:601;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+    #share-toast{
+      position:fixed;
+      right:var(--fab-edge);
+      bottom:calc(var(--danmu-bar-h) + 200px + var(--fab-bottom-safe));
+      background:#1a1a2e;color:#F5A623;border-radius:10px;padding:.55rem 1rem;font-size:.82rem;z-index:601;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;
+    }
     #share-toast.show{opacity:1;}
 
     :root {
+      /* 底部粘性弹幕条高度：用于计算分享/回顶等 fixed 按钮，避免与「发送」叠在一起 */
+      --danmu-bar-h: 56px;
+      --fab-edge: max(14px, env(safe-area-inset-right, 0px));
+      --fab-bottom-safe: env(safe-area-inset-bottom, 0px);
       --yellow: #FFB703;
       --yellow-dim: #e09f00;
       --bg: #5A189A;
@@ -195,24 +213,51 @@
     nav {
       position: sticky; top: 0; z-index: 99;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 1.8rem; height: 58px;
+      flex-wrap: wrap;
+      row-gap: .35rem;
+      padding: .45rem 1.4rem;
+      min-height: 58px;
+      height: auto;
       background: rgba(13,10,30,0.96);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(245,166,35,.25);
     }
-    .nav-logo { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--yellow); font-family:'Playfair Display',serif; white-space:nowrap; }
-    .nav-links { display: flex; gap: 1.6rem; }
+    .nav-logo { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--yellow); font-family:'Playfair Display',serif; white-space:nowrap; flex-shrink:0; }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: .35rem 1.05rem;
+      flex: 1 1 220px;
+      min-width: 0;
+    }
     .nav-links a {
-      font-size: 0.88rem; color: rgba(255,255,255,.65);
-      text-decoration: none; letter-spacing: 0.06em;
+      font-size: 0.86rem; color: rgba(255,255,255,.72);
+      text-decoration: none; letter-spacing: 0.05em;
       transition: color 0.2s;
+      padding: .35rem .2rem;
     }
     .nav-links a:hover { color: var(--yellow); }
     @media(max-width:540px){
-      nav { padding:0 .8rem; gap:.5rem; }
-      .nav-links { gap:0; overflow-x:auto; scrollbar-width:none; flex-shrink:1; min-width:0; }
+      nav { padding:.4rem .75rem; column-gap:.5rem; }
+      .nav-links {
+        flex: 1 1 100%;
+        order: 3;
+        justify-content: flex-start;
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        flex-wrap: nowrap;
+        padding: .15rem 0 .35rem;
+        border-top: 1px solid rgba(245,166,35,.12);
+      }
       .nav-links::-webkit-scrollbar { display:none; }
-      .nav-links a { font-size:.78rem; white-space:nowrap; padding:.4rem .6rem; }
+      .nav-links a { font-size:.78rem; white-space:nowrap; padding:.45rem .65rem; }
+    }
+    @media(min-width:900px){
+      .nav-links{ gap:.4rem 1.35rem; }
+      .nav-links a{ font-size:.9rem; }
     }
 
     /* ── HERO SLIDESHOW ── */
@@ -366,16 +411,23 @@
       0%,100%{transform:translateY(0)}
       55%{transform:translateY(7px)}
     }
+    /* 与相册 ‹› 分离：固定在右侧，叠在「分享」之上，不再和左侧箭头抢位置 */
     #scroll-fab {
-      position: fixed; left: 1.2rem; bottom: 40%; z-index: 99;
-      display: flex; flex-direction: column; gap: .5rem;
+      position: fixed;
+      z-index: 98;
+      left: auto;
+      right: var(--fab-edge);
+      bottom: calc(var(--danmu-bar-h) + 12px + 52px + 14px + 2.4rem + 10px + var(--fab-bottom-safe));
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    @media(max-width:768px){ #scroll-fab{display:none!important;} }
+    @media(max-width: 520px){ #scroll-fab{ display: none !important; } }
     @media(max-width:375px){
       #danmu-input{width:70px;}
       .hero-pill{font-size:.72rem;padding:.25rem .6rem;}
       .achieve-grid{grid-template-columns:1fr;}
-      #danmu-banner{height:auto;min-height:48px;}
+      #danmu-banner.danmu-bar{height:auto;min-height:var(--danmu-bar-h);}
     }
     @media(max-width:600px){
       #nav-toggle{display:block!important;}
@@ -390,16 +442,24 @@
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.12);
       font-size: 1rem; color: var(--yellow); user-select: none;
+      min-height: 0 !important;
+      min-width: 0 !important;
+      box-sizing: border-box;
+      padding: 0;
     }
     .sfab-btn:hover { background: var(--yellow); color: #0d0c08; }
     #back-top {
-      position: fixed; right: 1.2rem; bottom: 8.5rem; z-index: 99;
+      position: fixed; z-index: 99;
+      right: var(--fab-edge);
+      bottom: calc(var(--danmu-bar-h) + 12px + 52px + 14px + var(--fab-bottom-safe));
       width: 2.4rem; height: 2.4rem; border-radius: 50%;
       background: rgba(90,24,154,.85); backdrop-filter: blur(6px);
       border: 1.5px solid rgba(255,183,3,.5);
       display: none; align-items: center; justify-content: center;
       cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.12);
       font-size: 1.1rem;
+      min-height: 0 !important;
+      box-sizing: border-box;
     }
     #back-top:hover { background: var(--yellow); }
 
@@ -1112,13 +1172,31 @@
     .photo-wall img:hover { transform: scale(1.03) rotate(1deg); box-shadow: 0 12px 32px rgba(0,0,0,.5); }
 
     .photo-strip-wrap { position:relative; overflow:hidden; }
-    .photo-strip { display:flex; gap:.6rem; overflow-x:auto; scroll-behavior:smooth; padding:.5rem 1rem; scrollbar-width:none; }
+    .photo-strip { display:flex; gap:.6rem; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; }
     .photo-strip::-webkit-scrollbar { display:none; }
     .photo-strip img { height:260px; width:auto; flex-shrink:0; border-radius:16px; object-fit:cover; cursor:pointer; transition:transform .3s,box-shadow .3s; }
     .photo-strip img:hover { transform:scale(1.05) rotate(1deg); box-shadow:0 12px 32px rgba(0,0,0,.2); }
-    .strip-btn { position:absolute; top:50%; transform:translateY(-50%); z-index:2; background:var(--yellow); border:none; border-radius:50%; width:2.4rem; height:2.4rem; font-size:1.4rem; cursor:pointer; color:#0d0c08; font-weight:900; line-height:1; box-shadow:0 4px 12px rgba(0,0,0,.15); }
-    .strip-prev { left:.4rem; }
-    .strip-next { right:.4rem; }
+    .strip-btn {
+      position:absolute; top:50%; transform:translateY(-50%); z-index:6;
+      background:var(--yellow); border:none; border-radius:50%;
+      width:2.85rem; height:2.85rem;
+      font-size:1.38rem; cursor:pointer; color:#0d0c08; font-weight:900; line-height:1;
+      box-shadow:0 4px 12px rgba(0,0,0,.15);
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:0; box-sizing:border-box;
+      min-height:0 !important; min-width:0 !important;
+      touch-action:manipulation;
+    }
+    /* 扩大可点区域（视觉仍是圆钮） */
+    .strip-btn::after{
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius:50%;
+    }
+    .strip-prev { left:.25rem; }
+    .strip-next { right:.25rem; }
+    .photo-strip { padding: .5rem 3.1rem; }
 
     .quote-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
     .quote-item { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:1.4rem 1.2rem; cursor:pointer; transition:transform .2s,box-shadow .2s; }
@@ -1245,14 +1323,87 @@
     }
     /* ── 手机响应式 ── */
     button,.btn,[role="button"]{min-height:44px;touch-action:manipulation;}
+    /* 小圆钮/底栏控件不受 44px 全局撑高影响 */
+    button.strip-btn,
+    #danmu-send,
+    #share-fab,
+    .sfab-btn,
+    #back-top,
+    #nav-toggle,
+    #bgm-btn {
+      min-height: 0;
+    }
     .btn{padding:.8rem 2rem;}
     #ticket-enter{min-height:44px;padding:.8rem 1.8rem;}
+    /* 底部弹幕条：避免「发送」被全局 44px 按钮规则撑出条外，与回顶/分享叠在一起 */
+    #danmu-banner.danmu-bar{
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      overflow: hidden;
+      min-height: var(--danmu-bar-h);
+      height: auto;
+      box-sizing: border-box;
+      padding-top: 6px;
+      padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      align-items: center;
+      background: linear-gradient(90deg,rgba(13,27,75,.97),rgba(26,5,51,.97));
+      border-top: 1px solid rgba(245,166,35,.3);
+    }
+    .danmu-controls{
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      padding: 0 .45rem 0 .55rem;
+      z-index: 4;
+      background: linear-gradient(90deg, rgba(26,5,51,.94), rgba(13,27,75,.98));
+      max-width: min(210px, 56vw);
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+    #danmu-send{
+      min-height: 0 !important;
+      height: 36px !important;
+      max-height: 36px !important;
+      line-height: 1;
+      padding: 0 .7rem !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      font-size: .76rem;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    #danmu-input{
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 140px;
+    }
+    .danmu-fade-mid{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: min(200px, 56vw);
+      width: 48px;
+      pointer-events: none;
+      z-index: 3;
+      background: linear-gradient(270deg, rgba(13,27,75,.95), transparent);
+    }
     @media(max-width:768px){
       .sec{padding:3rem 1rem;}
       .sec-title{font-size:clamp(1.4rem,5vw,2rem);}
       .profile-grid{grid-template-columns:1fr 1fr;}
       .album-card,.musical-card,.review-card{width:100%;min-width:unset;}
       #photo-strip img{height:180px;}
+      .photo-strip{ padding: .5rem 2.65rem; }
       .habit-grid{grid-template-columns:1fr 1fr;}
       .skill-grid{grid-template-columns:1fr 1fr;}
       .cg-grid{grid-template-columns:1fr;}
@@ -1297,7 +1448,7 @@
       /* 地图自适应 */
       #map-canvas{height:auto;}
       /* 弹幕输入区 */
-      #danmu-input{width:calc(100vw - 220px);min-width:80px;max-width:160px;}
+      #danmu-input{width:calc(100vw - 200px);min-width:72px;max-width:130px;}
     }
     /* ── Micro-interactions ── */
     .album-card,.musical-card,.review-card,.edu-card,.social-card,.award-item,.tl-item,.cg-link{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
@@ -1392,7 +1543,6 @@
     <a href="#musicals" onclick="closeNav()">音乐剧</a>
     <a href="#collections" onclick="closeNav()">合集</a>
     <a href="#social" onclick="closeNav()">关注</a>
-    <a href="#bday-card-sec" onclick="closeNav()">贺卡</a>
   </div>
   <button id="bgm-btn" title="播放/暂停音乐" style="background:none;border:1px solid rgba(245,166,35,.5);color:var(--yellow);border-radius:9999px;padding:.28rem .8rem;font-size:.82rem;cursor:pointer;letter-spacing:.05em;"><span aria-hidden="true">♪</span> BGM</button>
   <span id="bgm-title" style="font-size:.72rem;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:none;"></span>
@@ -1711,39 +1861,14 @@
   </div>
 </section>
 
-<!-- 生日祝福卡 -->
-<section id="bday-card-sec" style="display:none;padding:2rem 1rem 3rem;max-width:600px;margin:0 auto;text-align:center;">
-  <h2 style="color:var(--yellow);font-size:1.5rem;margin-bottom:.5rem;"><span aria-hidden="true">🎂</span> 生成生日祝福卡</h2>
-  <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem;">4月21日，他27岁。</p>
-  <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;">写下你想对他说的话，生成专属贺卡，发到超话让他看见你 ✦</p>
-  <div style="display:flex;flex-direction:column;gap:.7rem;align-items:center;">
-    <input id="bc-name" placeholder="你的名字 / 昵称" style="width:100%;max-width:340px;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);font-size:.95rem;color:var(--text);" />
-    <textarea id="bc-msg" placeholder="写下你的祝福…" rows="3" style="width:100%;max-width:340px;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);font-size:.95rem;color:var(--text);resize:none;"></textarea>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
-      <span style="font-size:.85rem;color:var(--muted);align-self:center;">主题：</span>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="star" checked style="display:none" onchange="updateThemeUI()"><span id="bc-t-star" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:3px solid #F5A623;background:#F5A623;color:#0d0c08;font-size:.8rem;font-weight:700;transition:all .2s;">🌟 星空</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="pink" style="display:none" onchange="updateThemeUI()"><span id="bc-t-pink" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #f472b6;background:transparent;color:#f472b6;font-size:.8rem;transition:all .2s;">🌸 粉樱</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="gold" style="display:none" onchange="updateThemeUI()"><span id="bc-t-gold" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #d4891a;background:transparent;color:#F5A623;font-size:.8rem;transition:all .2s;">✦ 热忱黄</span></label>
-      <label style="cursor:pointer;"><input type="radio" name="bc-theme" value="blue" style="display:none" onchange="updateThemeUI()"><span id="bc-t-blue" style="display:inline-block;padding:.3rem .8rem;border-radius:9999px;border:2px solid #3b82f6;background:transparent;color:#3b82f6;font-size:.8rem;transition:all .2s;">💙 深海蓝</span></label>
-    </div>
-    <p style="color:var(--muted);font-size:.78rem;margin:.2rem 0 0;">💡 先选主题，再点生成贺卡</p>
-    <button onclick="genBdayCard()" class="btn-primary ripple-host" style="padding:.6rem 2rem;">生成贺卡</button>
-  </div>
-  <canvas id="bc-canvas" style="display:none;margin:1.2rem auto 0;border-radius:14px;max-width:100%;box-shadow:0 8px 32px rgba(0,0,0,.25);"></canvas>
-  <p id="bc-hint" style="display:none;color:var(--muted);font-size:.8rem;margin-top:.6rem;">长按或右键保存图片，发到超话为 Lars 庆生！</p>
-  <a id="bc-download" style="display:none;margin:.8rem auto 0;" class="btn btn-primary" download="hzhf-birthday.png">保存贺卡图片</a>
-  <a id="bc-weibo" style="display:none;margin:.4rem auto 0;" class="btn btn-outline" href="https://service.weibo.com/share/share.php?url=https://WY-0709.github.io/hzhf-fanpage&title=4.21+黄子弘凡27岁生日快乐！我为Lars送上祝福🎂+%23黄子弘凡%23&pic=" target="_blank" rel="noopener">分享到微博 ✦</a>
-  <p id="bc-hint2" style="display:none;color:var(--muted);font-size:.82rem;margin-top:.8rem;">保存图片后，发到微博超话 <a href="https://weibo.com/p/100808c98f988ea22d7b40caed47951f8eb507/super_index" target="_blank" style="color:var(--yellow);">#黄子弘凡#</a> 为 Lars 庆生！</p>
-</section>
-
 <!-- ── 许愿弹幕 Banner ── -->
-<div id="danmu-banner" style="position:sticky;bottom:0;left:0;right:0;z-index:500;overflow:hidden;background:linear-gradient(90deg,rgba(13,27,75,.97),rgba(26,5,51,.97));border-top:1px solid rgba(245,166,35,.3);display:flex;align-items:center;height:48px;">
-  <div id="danmu-track" style="display:flex;gap:3rem;white-space:nowrap;position:absolute;will-change:transform;left:0;"></div>
-  <div style="position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(90deg,rgba(13,27,75,.97),transparent);pointer-events:none;z-index:3;"></div>
-  <div style="position:absolute;right:160px;top:0;bottom:0;width:60px;background:linear-gradient(270deg,rgba(13,27,75,.97),transparent);pointer-events:none;z-index:3;"></div>
-  <div style="position:absolute;right:0;display:flex;align-items:center;gap:.4rem;padding:0 .6rem;z-index:4;background:rgba(13,27,75,.97);">
-    <input id="danmu-input" placeholder="发祝福…" maxlength="30" style="width:120px;padding:.25rem .6rem;border-radius:9999px;border:1px solid rgba(245,166,35,.4);background:rgba(255,255,255,.08);font-size:.75rem;color:#fff;outline:none;" onkeydown="if(event.key==='Enter')sendCustomDanmu()">
-    <button onclick="sendCustomDanmu()" style="min-height:44px;padding:.25rem .7rem;border-radius:9999px;background:#F5A623;border:none;color:#0d0c08;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;">发送</button>
+<div id="danmu-banner" class="danmu-bar">
+  <div id="danmu-track" style="display:flex;gap:3rem;white-space:nowrap;position:absolute;will-change:transform;left:0;top:0;bottom:0;align-items:center;"></div>
+  <div style="position:absolute;left:0;top:0;bottom:0;width:56px;background:linear-gradient(90deg,rgba(13,27,75,.97),transparent);pointer-events:none;z-index:3;"></div>
+  <div class="danmu-fade-mid" aria-hidden="true"></div>
+  <div class="danmu-controls">
+    <input id="danmu-input" placeholder="发祝福…" maxlength="30" style="width:100%;padding:.28rem .55rem;border-radius:9999px;border:1px solid rgba(245,166,35,.4);background:rgba(255,255,255,.08);font-size:.74rem;color:#fff;outline:none;" onkeydown="if(event.key==='Enter')sendCustomDanmu()">
+    <button type="button" id="danmu-send" onclick="sendCustomDanmu()">发送</button>
   </div>
 </div>
 
@@ -3815,117 +3940,6 @@ document.getElementById("share-fab").addEventListener("click",()=>{
 });
 
 /* ══ console 彩蛋 ══ */
-/* ══ 生日贺卡 Canvas ══ */
-const THEME_STYLES={
-  star:{bg:"#F5A623",color:"#0d0c08",border:"3px solid #F5A623"},
-  pink:{bg:"#f472b6",color:"#fff",border:"3px solid #f472b6"},
-  gold:{bg:"#d4891a",color:"#fff",border:"3px solid #d4891a"},
-  blue:{bg:"#3b82f6",color:"#fff",border:"3px solid #3b82f6"},
-};
-function updateThemeUI(){
-  const val=(document.querySelector('input[name="bc-theme"]:checked')||{value:"star"}).value;
-  ["star","pink","gold","blue"].forEach(k=>{
-    const el=document.getElementById("bc-t-"+k);
-    if(!el) return;
-    if(k===val){ el.style.background=THEME_STYLES[k].bg; el.style.color=THEME_STYLES[k].color; el.style.border=THEME_STYLES[k].border; el.style.fontWeight="700"; el.style.transform="scale(1.08)"; }
-    else{ el.style.background="transparent"; el.style.color=el.style.borderColor||""; el.style.border="2px solid"; el.style.fontWeight="400"; el.style.transform=""; }
-  });
-}
-function genBdayCard(){
-  const name=document.getElementById("bc-name").value.trim()||"蟹黄堡粉丝";
-  const msg=document.getElementById("bc-msg").value.trim()||"生日快乐！";
-  const theme=(document.querySelector('input[name="bc-theme"]:checked')||{value:"star"}).value;
-  const cv=document.getElementById("bc-canvas");
-  cv.width=600; cv.height=340; cv.style.display="block";
-  const ctx=cv.getContext("2d");
-
-  function wrapText(text,x,y,maxW,lineH,align){
-    ctx.textAlign=align||"center";
-    let line="";
-    for(const ch of text){
-      const test=line+ch;
-      if(ctx.measureText(test).width>maxW){ctx.fillText(line,x,y);line=ch;y+=lineH;}
-      else line=test;
-    }
-    if(line) ctx.fillText(line,x,y);
-  }
-
-  if(theme==="star"){
-    // 星空：居中，深蓝紫渐变，金色大标题
-    const g=ctx.createLinearGradient(0,0,600,340);
-    g.addColorStop(0,"#0d1b4b"); g.addColorStop(1,"#2d0550");
-    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
-    for(let i=0;i<80;i++){
-      ctx.beginPath(); ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.8+.3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${Math.random()*.7+.2})`; ctx.fill();
-    }
-    ctx.textAlign="center";
-    ctx.font="bold 42px 'Playfair Display',serif"; ctx.fillStyle="#F5A623"; ctx.fillText("黄子弘凡 Lars",300,75);
-    ctx.font="16px sans-serif"; ctx.fillStyle="rgba(255,255,255,.7)"; ctx.fillText("✦ 4.21 · 二十七岁生日快乐 ✦",300,112);
-    ctx.font="bold 14px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,300,160);
-    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(255,255,255,.8)";
-    wrapText(msg,300,195,480,22,"center");
-    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(255,255,255,.25)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",300,325);
-
-  } else if(theme==="pink"){
-    // 粉樱：左对齐，粉色系，花瓣装饰
-    const g=ctx.createLinearGradient(0,0,600,340);
-    g.addColorStop(0,"#fff0f6"); g.addColorStop(1,"#fce4f0");
-    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
-    ["🌸","🌸","🌸","🌸","🌸","🌸"].forEach(()=>{
-      ctx.font=`${18+Math.random()*18}px sans-serif`;
-      ctx.globalAlpha=Math.random()*.25+.08;
-      ctx.fillText("🌸",Math.random()*600,Math.random()*340);
-    });
-    ctx.globalAlpha=1;
-    ctx.fillStyle="#c2185b"; ctx.fillRect(0,0,6,340);
-    ctx.textAlign="left";
-    ctx.font="bold 36px 'Playfair Display',serif"; ctx.fillStyle="#c2185b"; ctx.fillText("黄子弘凡 Lars",30,70);
-    ctx.font="14px sans-serif"; ctx.fillStyle="#ad1457"; ctx.fillText("4.21 · 二十七岁生日快乐",30,100);
-    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,30,140);
-    ctx.font="13px sans-serif"; ctx.fillStyle="#5d1a35";
-    wrapText(msg,30,175,540,22,"left");
-    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(180,80,120,.4)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",30,320);
-
-  } else if(theme==="gold"){
-    // 热忱黄：纯黑底，超大黄色字，极简
-    ctx.fillStyle="#0a0800"; ctx.fillRect(0,0,600,340);
-    ctx.fillStyle="#F5A623"; ctx.fillRect(0,300,600,3);
-    ctx.textAlign="center";
-    ctx.font="bold 52px 'Playfair Display',serif"; ctx.fillStyle="#F5A623"; ctx.fillText("Lars",300,90);
-    ctx.font="bold 22px sans-serif"; ctx.fillStyle="#fff"; ctx.fillText("黄子弘凡 · 二十七岁",300,130);
-    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(245,166,35,.7)"; ctx.fillText("4.21 生日快乐",300,162);
-    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#F5A623"; ctx.fillText("来自："+name,300,200);
-    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(255,255,255,.75)";
-    wrapText(msg,300,228,480,22,"center");
-    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(245,166,35,.2)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",300,322);
-
-  } else {
-    // 深海蓝：右对齐，竖线装饰
-    const g=ctx.createLinearGradient(0,0,600,340);
-    g.addColorStop(0,"#001233"); g.addColorStop(1,"#023e8a");
-    ctx.fillStyle=g; ctx.fillRect(0,0,600,340);
-    ctx.fillStyle="rgba(96,165,250,.15)"; ctx.fillRect(560,0,40,340);
-    ctx.fillStyle="#3b82f6"; ctx.fillRect(554,0,3,340);
-    for(let i=0;i<40;i++){
-      ctx.beginPath(); ctx.arc(Math.random()*600,Math.random()*340,Math.random()*1.2+.3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(147,197,253,${Math.random()*.5+.1})`; ctx.fill();
-    }
-    ctx.textAlign="right";
-    ctx.font="bold 38px 'Playfair Display',serif"; ctx.fillStyle="#93c5fd"; ctx.fillText("黄子弘凡 Lars",540,70);
-    ctx.font="14px sans-serif"; ctx.fillStyle="rgba(255,255,255,.65)"; ctx.fillText("4.21 · 二十七岁生日快乐",540,105);
-    ctx.font="bold 13px sans-serif"; ctx.fillStyle="#f472b6"; ctx.fillText("来自："+name,540,148);
-    ctx.font="13px sans-serif"; ctx.fillStyle="rgba(200,220,255,.85)";
-    wrapText(msg,540,182,500,22,"right");
-    ctx.font="10px sans-serif"; ctx.fillStyle="rgba(255,255,255,.2)"; ctx.fillText("蟹黄堡粉丝应援页 · 非官方",540,322);
-  }
-
-  document.getElementById("bc-hint").style.display="block";
-  const dl=document.getElementById("bc-download");
-  dl.href=cv.toDataURL("image/png"); dl.style.display="block";
-  document.getElementById("bc-weibo").style.display="block";
-  document.getElementById("bc-hint2").style.display="block";
-}
 
 /* ══ 入场券 ══ */
 (function(){
@@ -4213,7 +4227,7 @@ function sendCustomDanmu(){
   if(!bubble){
     bubble=document.createElement("div");
     bubble.id="danmu-bubble";
-    bubble.style.cssText="position:fixed;bottom:56px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;border-radius:9999px;padding:.35rem 1.1rem;font-size:.82rem;font-weight:700;z-index:600;transition:opacity .4s;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer;border:1px solid rgba(245,166,35,.4);";
+    bubble.style.cssText="position:fixed;bottom:calc(56px + env(safe-area-inset-bottom, 0px) + 10px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;border-radius:9999px;padding:.35rem 1.1rem;font-size:.82rem;font-weight:700;z-index:600;transition:opacity .4s;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer;border:1px solid rgba(245,166,35,.4);";
     document.body.appendChild(bubble);
   }
   let countdown=5;
