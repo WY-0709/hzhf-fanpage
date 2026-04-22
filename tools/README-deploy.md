@@ -8,7 +8,7 @@
 python -m pip install -U cos-python-sdk-v5
 ```
 
-设置环境变量（PowerShell）：
+设置环境变量（PowerShell），**或**在仓库根目录创建 `.env`（已在 `.gitignore`，不要提交）：
 
 ```powershell
 $env:COS_SECRET_ID="你的SecretId"
@@ -16,6 +16,17 @@ $env:COS_SECRET_KEY="你的SecretKey"
 $env:COS_BUCKET="hzhf-fanpage-1423398694"
 $env:COS_REGION="ap-guangzhou"
 ```
+
+`.env` 示例（每行一个，无引号也可）：
+
+```
+COS_SECRET_ID=你的SecretId
+COS_SECRET_KEY=你的SecretKey
+COS_BUCKET=hzhf-fanpage-1423398694
+COS_REGION=ap-guangzhou
+```
+
+`upload_music_cos.py` 会自动读取根目录 `.env`。
 
 执行上传：
 

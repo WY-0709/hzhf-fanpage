@@ -21,6 +21,21 @@ from pathlib import Path
 from qcloud_cos import CosConfig, CosS3Client  # type: ignore
 
 
+def _load_dotenv(repo_root: Path) -> None:
+    """可选：从仓库根目录 .env 读取 COS_*（勿提交 .env 到 Git）。"""
+    p = repo_root / ".env"
+    if not p.is_file():
+        return
+    for raw in p.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, _, v = line.partition("=")
+        k, v = k.strip(), v.strip().strip('"').strip("'")
+        if k and not os.environ.get(k):
+            os.environ[k] = v
+
+
 def _require_env(name: str) -> str:
     v = os.environ.get(name, "").strip()
     if not v:
@@ -64,6 +79,8 @@ def main() -> None:
         help="Use multipart upload when file size exceeds this (MB)",
     )
     args = parser.parse_args()
+
+    _load_dotenv(Path(__file__).resolve().parents[1])
 
     src: Path = args.src.expanduser().resolve()
     if not src.is_dir():
