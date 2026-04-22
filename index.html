@@ -87,7 +87,7 @@
     #loader{position:fixed;inset:0;background:#0a0614;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease;}
     #loader.hide{opacity:0;visibility:hidden;}
     #loader-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,5vw,2.6rem);color:#F5A623;letter-spacing:.12em;margin-bottom:1.4rem;opacity:0;animation:loaderFadeIn .8s .2s forwards;}
-    #loader-bar-wrap{width:220px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;}
+    #loader-bar-wrap{width:min(220px,80vw);height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;}
     #loader-bar{height:100%;width:0;background:linear-gradient(90deg,#F5A623,#f472b6);border-radius:2px;transition:width .12s linear;}
     #loader-sub{margin-top:.9rem;font-size:.82rem;color:rgba(255,255,255,.5);letter-spacing:.05em;opacity:0;animation:loaderFadeIn .8s .6s forwards;}
     @keyframes loaderFadeIn{to{opacity:1;}}
@@ -428,6 +428,11 @@
       .hero-pill{font-size:.72rem;padding:.25rem .6rem;}
       .achieve-grid{grid-template-columns:1fr;}
       #danmu-banner.danmu-bar{height:auto;min-height:var(--danmu-bar-h);}
+    }
+    @media(max-width:320px){
+      .sec{padding:3rem .6rem;}
+      .hero-title{font-size:clamp(1.4rem,8vw,2rem);}
+      #bgm-title{display:none!important;}
     }
     @media(max-width:600px){
       #nav-toggle{display:block!important;}
@@ -1172,7 +1177,7 @@
     .photo-wall img:hover { transform: scale(1.03) rotate(1deg); box-shadow: 0 12px 32px rgba(0,0,0,.5); }
 
     .photo-strip-wrap { position:relative; overflow:hidden; }
-    .photo-strip { display:flex; gap:.6rem; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; }
+    .photo-strip { display:flex; gap:.6rem; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
     .photo-strip::-webkit-scrollbar { display:none; }
     .photo-strip img { height:260px; width:auto; flex-shrink:0; border-radius:16px; object-fit:cover; cursor:pointer; transition:transform .3s,box-shadow .3s; }
     .photo-strip img:hover { transform:scale(1.05) rotate(1deg); box-shadow:0 12px 32px rgba(0,0,0,.2); }
@@ -1544,7 +1549,7 @@
     <a href="#social" onclick="closeNav()">关注</a>
   </div>
   <button id="bgm-btn" title="播放/暂停音乐" style="background:none;border:1px solid rgba(245,166,35,.5);color:var(--yellow);border-radius:9999px;padding:.28rem .8rem;font-size:.82rem;cursor:pointer;letter-spacing:.05em;flex-shrink:0;"><span aria-hidden="true">♪</span> BGM</button>
-  <span id="bgm-title" style="font-size:.72rem;color:var(--muted);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:none;"></span>
+  <span id="bgm-title" style="font-size:.72rem;color:var(--muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:none;"></span>
   <button id="nav-toggle" aria-label="菜单" style="display:none;background:none;border:1px solid rgba(245,166,35,.5);color:var(--yellow);border-radius:8px;padding:.28rem .6rem;font-size:1.1rem;cursor:pointer;">☰</button>
   <audio id="bgm-audio"></audio>
 </nav>
