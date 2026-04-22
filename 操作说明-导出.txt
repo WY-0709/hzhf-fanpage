@@ -1,0 +1,94 @@
+================================================================================
+  黄子弘凡粉丝页 · 操作说明与进度导出
+  导出时间：请在本机查看文件属性中的「修改日期」
+  项目路径：C:\Users\WangY\hzhf-fanpage
+  线上页面（GitHub Pages）：https://wy-0709.github.io/hzhf-fanpage/
+================================================================================
+
+【一、你现在要做什么】（按顺序，按需执行）
+
+1) 日常改页面文案 / 样式 / 布局
+   - 编辑 index.html
+   - 在项目目录执行：
+     git add index.html
+     git commit -m "说明本次修改"
+     git push origin clean-main:main
+   - 等待 GitHub Pages 刷新（一般 1～3 分钟），必要时浏览器 Ctrl+F5 强刷。
+
+2) 把 BGM 传到腾讯云 COS（图/歌仍在 COS，页面在 GitHub）
+   - 音乐本地目录示例：D:\Music\黄子弘凡
+   - 在腾讯云 CAM 创建/查看 API 密钥（SecretId、SecretKey），勿发聊天、勿提交 Git。
+   - 在仓库根目录 C:\Users\WangY\hzhf-fanpage 新建 .env（已在 .gitignore），内容示例：
+     COS_SECRET_ID=你的SecretId
+     COS_SECRET_KEY=你的SecretKey
+     COS_BUCKET=hzhf-fanpage-1423398694
+     COS_REGION=ap-guangzhou
+   - 安装 SDK 并上传：
+     python -m pip install -U cos-python-sdk-v5
+     cd C:\Users\WangY\hzhf-fanpage
+     python .\tools\upload_music_cos.py
+     （或指定目录：python .\tools\upload_music_cos.py --src "D:\Music\黄子弘凡"）
+   - 注意：网页里 BGM 链接的文件名必须和 COS 上 music/ 下的文件名一致；新文件还要改 index.html 里的列表。
+
+3) 只更新首页等静态文件到 COS（可选，与 deploy_cos 脚本一致）
+   - 同样配置好 .env 或环境变量后：
+     python .\tools\deploy_cos.py
+   - 详见 tools\README-deploy.md
+
+4) 查看腾讯云 SecretId / SecretKey 在哪里
+   - 登录腾讯云控制台 → 访问管理 CAM → 访问密钥 / API 密钥管理
+   - SecretKey 通常只在创建时出现一次，丢失需新建密钥。
+
+--------------------------------------------------------------------------------
+
+【二、已经做过什么】（会话与仓库内已完成的工作摘要）
+
+■ 页面与交互
+  - 统一黄紫风格、移动端布局、Hero 与图片加载相关优化（含 COS 图片参数等）。
+  - 盲盒：布局、链接文案按平台区分、无图/有图模式等。
+  - 标签云、全局点击反馈（波纹与 .btn 圆角按压等）。
+  - 正文/合集/时间轴等链接：提高对比度、可聚焦样式；合集 .cg-link 等调整。
+  - 底部弹幕条：高度与「发送」按钮、右侧分享/回顶/滚动球的垂直间距，减少重叠。
+  - #scroll-fab（上下滚动）改为固定在右侧，避免与相册墙左侧 ‹ 箭头重叠；极窄屏隐藏。
+  - 相册墙 ‹ ›：加大按钮与点击热区、左右留白。
+  - 顶部导航：可换行、间距优化；已移除「贺卡」导航项及整段贺卡区块与相关 Canvas 脚本。
+
+■ 部署与工具
+  - GitHub：clean-main 已多次 push 到 origin/main，Pages 即上述网址。
+  - tools\deploy_cos.py：上传 index.html 等到 COS。
+  - tools\upload_music_cos.py：将 D:\Music\黄子弘凡（可 --src）中的音频上传到 COS 的 music/ 前缀；支持大文件分片；可从根目录 .env 读取 COS_*。
+  - tools\README-deploy.md：部署与 BGM 上传说明；依赖为 cos-python-sdk-v5（不要用错旧包名）。
+
+■ 安全
+  - 曾在聊天中泄露的密钥应已在腾讯云侧禁用并轮换；密钥只应放在本机 .env 或环境变量。
+
+--------------------------------------------------------------------------------
+
+【三、网站架构（方便你记）】
+
+  - 页面 HTML/脚本：GitHub Pages（主入口）。
+  - 大图、音频等资源：COS 公网 URL（index.html 里已写 myqcloud 等链接）。
+  - 上传页面用 deploy_cos.py；上传曲库用 upload_music_cos.py。
+
+--------------------------------------------------------------------------------
+
+【四、常用路径】
+
+  项目根目录：     C:\Users\WangY\hzhf-fanpage
+  主页面：         index.html
+  部署说明：       tools\README-deploy.md
+  上传静态页：     tools\deploy_cos.py
+  上传 BGM：       tools\upload_music_cos.py
+  本说明导出：     操作说明-导出.txt（本文件）
+
+--------------------------------------------------------------------------------
+
+【五、遇到问题可对照】
+
+  - BGM 已传但网页不播：检查 index.html 里文件名是否与 COS 一致；是否需改扩展名（如只链了 .mp3）。
+  - COS 脚本报 Missing env var：检查 .env 是否在仓库根目录、变量名是否拼对。
+  - pip 装错包：使用 cos-python-sdk-v5，导入名为 qcloud_cos。
+
+================================================================================
+  完。可将本文件复制到 Windows 记事本另存，或直接用记事本打开本 .txt。
+================================================================================
