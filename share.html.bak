@@ -80,7 +80,7 @@ body{
       <canvas id="qr"></canvas>
       <span class="qr-hint">扫描二维码</span>
     </div>
-    <a class="btn-enter" href="https://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com">进入生日特辑 →</a>
+    <a class="btn-enter" href="http://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com">进入生日特辑 →</a>
   </div>
   <div class="invite-footer">粉丝非官方制作 · 蟹黄堡出品</div>
 </div>
@@ -95,7 +95,7 @@ for(let i=0;i<40;i++){
   s.appendChild(d);
 }
 // 二维码
-QRCode.toCanvas(document.getElementById("qr"),"https://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com",{width:140,margin:1,color:{dark:"#2a1e0e",light:"#ffffff"}});
+QRCode.toCanvas(document.getElementById("qr"),"http://hzhf-fanpage-1423398694.cos-website.ap-guangzhou.myqcloud.com",{width:140,margin:1,color:{dark:"#2a1e0e",light:"#ffffff"}});
 </script>
 </body>
 </html>
