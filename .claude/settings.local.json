@@ -1,0 +1,12 @@
+{
+  "enabledMcpjsonServers": [
+    "github",
+    "memory"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
