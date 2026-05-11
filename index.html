@@ -4356,19 +4356,5 @@ document.getElementById('nav-toggle').onclick=()=>document.getElementById('nav-l
     document.getElementById('back-top').style.display=window.scrollY>300?'flex':'none';
   });
 </script>
-<script>
-(function(){
-  const imgs = BLINDBOX.filter(i=>i.img).map(i=>i.img);
-  const preload = ()=> {
-    const edge = Math.min(800, Math.round(cosOptimalLongEdge() * 0.5));
-    imgs.forEach(src=>{
-      const u = cosFastImgUrl(src, {longEdge:edge, quality:85});
-      const img = new Image(); img.src = u;
-    });
-  };
-  if('requestIdleCallback' in window) requestIdleCallback(preload, {timeout:3000});
-  else setTimeout(preload, 2000);
-})();
-</script>
 </body>
 </html>
