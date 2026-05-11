@@ -3048,9 +3048,8 @@ const HERO_SLIDES = (function(){
   }
   // 预加载前两张
   loadSlide(0);
-  loadSlide(1);
-  // 防止首屏空白：确保第 0 张立刻有图
   slides[0].style.setProperty("--hero-img", `url("${enhanceImgUrl(srcs[0])}")`);
+  setTimeout(() => loadSlide(1), 800);
   setInterval(() => {
     slides[cur].classList.remove("active");
     cur = (cur + 1) % slides.length;
