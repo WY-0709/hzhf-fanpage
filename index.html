@@ -71,6 +71,7 @@
     .tk-stub-num{font-size:1.1rem;font-weight:700;color:var(--yellow);letter-spacing:.08em;}
     #ticket-enter{background:linear-gradient(135deg,#F5A623,#d4891a);color:#0d0c08;border:none;border-radius:9999px;padding:.55rem 1.3rem;font-size:.85rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(245,166,35,.4);white-space:nowrap;min-height:44px;}
     #ticket-enter:hover{transform:scale(1.06);box-shadow:0 6px 24px rgba(245,166,35,.6);}
+    #bgm-hint{font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:.04em;text-align:center;}
     @media(max-width:520px){
       #ticket{flex-direction:column;width:92vw;max-width:340px;}
       #ticket-main{border-radius:16px 16px 0 0;padding:1.5rem 1.2rem 1rem;}
@@ -1522,7 +1523,10 @@
       </div>
       <div style="margin-top:1.4rem;display:flex;align-items:center;justify-content:space-between;">
         <div class="tk-barcode" id="tk-barcode"></div>
-        <button id="ticket-enter">入场 →</button>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+          <span id="bgm-hint">🎵 记得点右上角开启背景音乐</span>
+          <button id="ticket-enter">入场 →</button>
+        </div>
       </div>
     </div>
     <div id="ticket-stub">
