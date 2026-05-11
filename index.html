@@ -4297,7 +4297,6 @@ function sendCustomDanmu(){
   const color=DANMU_COLORS[Math.floor(Math.random()*DANMU_COLORS.length)];
   const span=addDanmuToTrack("💬 "+t, color);
   sharedDanmu.push(t);
-  const danmuIdx=sharedDanmu.length-1;
   if(sharedDanmu.length>100) sharedDanmu.shift();
 
   // 撤回按钮（5秒内可撤回）
@@ -4309,15 +4308,18 @@ function sendCustomDanmu(){
     document.body.appendChild(bubble);
   }
   let countdown=5;
+  let cancelled=false;
   bubble.textContent=`撤回「${t}」(${countdown}s)`;
   bubble.style.opacity="1";
   clearTimeout(bubble._t); clearInterval(bubble._iv);
-  bubble._iv=setInterval(()=>{ countdown--; if(countdown>0){ bubble.textContent=`撤回「${t}」(${countdown}s)`; } else { clearInterval(bubble._iv); bubble.style.opacity="0"; // 超时才写入
-    fetch(WORKER_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{}); } },1000);
+  bubble._iv=setInterval(()=>{ countdown--; if(countdown>0){ bubble.textContent=`撤回「${t}」(${countdown}s)`; } else { clearInterval(bubble._iv); bubble.style.opacity="0";
+    if(!cancelled){ fetch(WORKER_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({msgs:sharedDanmu})}).catch(()=>{}); } } },1000);
   bubble.onclick=()=>{
     clearInterval(bubble._iv); bubble.style.opacity="0";
     if(span&&span.parentNode) span.parentNode.removeChild(span);
-    sharedDanmu=sharedDanmu.filter((_,i)=>i!==danmuIdx);
+    cancelled=true;
+    const idx=sharedDanmu.lastIndexOf(t);
+    if(idx!==-1) sharedDanmu.splice(idx,1);
     bubble.onclick=null;
   };
 }
