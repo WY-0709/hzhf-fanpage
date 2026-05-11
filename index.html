@@ -3543,12 +3543,31 @@ document.getElementById("energy-card").addEventListener("click", drawEnergy);
   // shuffle
   for(let i=picks.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[picks[i],picks[j]]=[picks[j],picks[i]];}
   const strip = document.getElementById("photo-strip");
-  if(strip){ picks.forEach(src=>{
-    const card=document.createElement("div"); card.className="photo-card";
-    const img=document.createElement("img"); img.src=src; img.loading="lazy"; img.alt="黄子弘凡";
-    card.appendChild(img);
-    strip.appendChild(card);
-  }); }
+  if(strip){
+    const INIT=30;
+    picks.slice(0,INIT).forEach(src=>{
+      const card=document.createElement("div"); card.className="photo-card";
+      const img=document.createElement("img"); img.src=src; img.loading="lazy"; img.alt="黄子弘凡";
+      card.appendChild(img);
+      strip.appendChild(card);
+    });
+    if(picks.length>INIT){
+      const sec=document.getElementById("photo-wall-sec");
+      const btn=document.createElement("button");
+      btn.textContent="查看更多（还有"+(picks.length-INIT)+"张）";
+      btn.style.cssText="display:block;margin:1.2rem auto 0;padding:.6rem 2rem;background:#FFB703;color:#000;font-weight:700;border:none;border-radius:9999px;cursor:pointer;font-size:.95rem;";
+      btn.onclick=function(){
+        picks.slice(INIT).forEach(src=>{
+          const card=document.createElement("div"); card.className="photo-card";
+          const img=document.createElement("img"); img.src=src; img.loading="lazy"; img.alt="黄子弘凡";
+          card.appendChild(img);
+          strip.appendChild(card);
+        });
+        btn.remove();
+      };
+      if(sec) sec.appendChild(btn);
+    }
+  }
   const wall = document.getElementById("photo-wall");
   if(wall){ picks.forEach(src=>{ const img=document.createElement("img"); img.src=src; img.loading="lazy"; img.alt="黄子弘凡"; wall.appendChild(img); }); }
 })();
