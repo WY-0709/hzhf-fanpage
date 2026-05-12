@@ -4429,5 +4429,29 @@ document.querySelectorAll('.mega-link').forEach(a => {
     document.getElementById('back-top').style.display=window.scrollY>300?'flex':'none';
   });
 </script>
+<style>
+@keyframes emoji-float{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-60px) scale(.6);opacity:0}}
+.emoji-particle{position:fixed;pointer-events:none;user-select:none;z-index:99999;animation:emoji-float .8s ease-out forwards;line-height:1}
+</style>
+<script>
+(function(){
+  if(!window.matchMedia('(pointer:fine)').matches)return;
+  var emojis=['🍔','🐶'],last=0;
+  document.addEventListener('mousemove',function(e){
+    var now=Date.now();
+    if(now-last<50)return;
+    last=now;
+    var el=document.createElement('span');
+    el.className='emoji-particle';
+    el.textContent=emojis[Math.random()<.5?0:1];
+    var sz=Math.floor(Math.random()*9)+16;
+    el.style.fontSize=sz+'px';
+    el.style.left=(e.clientX-sz/2)+'px';
+    el.style.top=(e.clientY-sz/2)+'px';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',function(){el.remove()});
+  });
+})();
+</script>
 </body>
 </html>
