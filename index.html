@@ -4288,10 +4288,12 @@ function saveTestImg(type){
   ctx.font="bold 22px sans-serif"; ctx.fillStyle="#fff";
   ctx.fillText(title,270,100);
   ctx.font="13px sans-serif"; ctx.fillStyle="rgba(255,255,255,.8)";
-  const words=desc; let line="",y=140;
+  const words=desc; let line="",y=140,lineCount=1;
   for(const ch of words){
-    if(ctx.measureText(line+ch).width>460){ctx.fillText(line,270,y);line=ch;y+=22;}
-    else line+=ch;
+    if(ctx.measureText(line+ch).width>460){
+      if(lineCount===6){while(ctx.measureText(line+"...").width>460)line=line.slice(0,-1);ctx.fillText(line+"...",270,y);line="";break;}
+      ctx.fillText(line,270,y);line=ch;y+=22;lineCount++;
+    } else line+=ch;
   }
   if(line) ctx.fillText(line,270,y);
   ctx.font="11px sans-serif"; ctx.fillStyle="rgba(245,166,35,.6)";
