@@ -4159,9 +4159,10 @@ document.getElementById("share-fab").addEventListener("click",()=>{
 
   if(btn) btn.addEventListener("click",()=>{
     btn.disabled=true; btn.style.opacity=".6";
+    if(el){ const cur=parseInt(el.textContent.replace(/,/g,""))||0; el.textContent=(cur+1).toLocaleString(); el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); }
     fetch(COUNTER_URL, {method:"POST"})
-      .then(r=>r.json()).then(d=>{ if(el&&d.count!=null){ el.textContent=Number(d.count).toLocaleString(); el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } })
-      .catch(()=>{ if(el){ el.style.transform="scale(1.3)"; setTimeout(()=>el.style.transform="",200); } });
+      .then(r=>r.json()).then(d=>{ if(el&&d.count!=null) el.textContent=Number(d.count).toLocaleString(); })
+      .catch(()=>{});
     btn.textContent="✦ 已送出祝福 ♡";
     fetch("https://ipapi.co/json/")
       .then(r=>r.json())
