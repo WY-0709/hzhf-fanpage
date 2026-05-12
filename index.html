@@ -1683,7 +1683,7 @@
     <div class="stat-cell"><div class="stat-num">10W+</div><div class="stat-label">鸟巢双场观众</div></div>
     <div class="stat-cell"><div class="stat-num">13</div><div class="stat-label">获奖记录</div></div>
     <div class="stat-cell"><div class="stat-num">8+</div><div class="stat-label">音乐剧角色</div></div>
-    <div class="stat-cell"><div class="stat-num">25</div><div class="stat-label">音乐作品</div></div>
+    <div class="stat-cell"><div class="stat-num">470</div><div class="stat-label">音乐作品</div></div>
   </div>
   <div class="profile-grid" id="profile-grid"></div>
 
@@ -2156,6 +2156,7 @@ const MILESTONES = [
   { year:"2022", text:"主演<strong>《唐朝诡事录之曼陀罗》</strong>，饰卢凌风，全国巡演超50场。" },
   { year:"2024", text:"启动<strong>全国19城33场体育馆巡演</strong>，大麦想看人数破210万。" },
   { year:"2025", text:"发行专辑<strong>《除了快乐禁止入内》</strong>，获TMEA年度最具影响力品质歌手、第32届东方风云榜年度人气歌手、IFPI白金认证；法语自作曲《Sillage》创作发布；入选IFPI《2025全球音乐报告》。" },  { year:"2026",  text:"<strong>北京鸟巢双场演唱会</strong>，成为\"未来主场计划\"首位开唱新生代歌手，完成剧院→体育馆→体育场三级跃迁；登上央视春晚。<a href='https://weibo.com/5599239416/QBpdAogRN' target='_blank' style='color:var(--yellow);margin-left:.5rem;font-size:.85em;'>▶ 鸟巢纪录片</a>" },
+  { year:"2026", text:"<strong>生日单曲《来自时光》</strong>发布，亲自作曲，易家扬作词，上线即登QQ音乐巅峰榜首位，单日播放量破百万" },
 ];
 
 // ── 性格标签 ──
@@ -2174,6 +2175,11 @@ const TAGS = [
   { text:"反骨",     c:"t-r", d:"3.8s", dl:".6s"  },
   { text:"艺术世家", c:"t-p", d:"4.2s", dl:"0s"   },
   { text:"目标导向", c:"t-w", d:"3.5s", dl:".9s"  },
+  { text:"鸟巢",     c:"t-y", d:"4.0s", dl:".2s"  },
+  { text:"颅内乐园", c:"t-b", d:"3.9s", dl:".5s"  },
+  { text:"IFPI五白金",c:"t-g", d:"4.1s", dl:".8s"  },
+  { text:"ENFP",     c:"t-p", d:"3.7s", dl:".1s"  },
+  { text:"宜人性极高",c:"t-w", d:"4.3s", dl:".4s"  },
 ];
 
 // ── 舞台编年史 ──
@@ -2272,6 +2278,24 @@ const TIMELINE = [
     desc:"生日前后「歌行四方」主题发布。5月23日扬州枣林湾音乐节、太湖湾音乐节相继开唱，巡演蓄力再出发。",
     links:[],
   },
+  {
+    year:"2026.03",
+    name:"鸟巢《万象回响》演唱会",
+    desc:"鸟巢定制曲《万象回响》由陈建骐量身打造，现场八万人合唱，话题阅读量破亿，成为\"未来主场计划\"首位新生代歌手。",
+    links:[],
+  },
+  {
+    year:"2026.04",
+    name:"生日单曲《来自时光》",
+    desc:"27岁生日发布原创单曲，亲自作曲，易家扬作词，吴庆隆编曲，上线即登由你榜日榜TOP1，单日播放量破百万。",
+    links:[],
+  },
+  {
+    year:"2026.05",
+    name:"央视五四晚会",
+    desc:"与蒋敦豪、张含韵合唱《我们很快乐》，传递青春能量，登腾讯音乐由你榜日榜TOP15。",
+    links:[],
+  },
 ];
 
 // ── 音乐专辑 ──
@@ -2281,7 +2305,7 @@ const ALBUMS = [
     name:"《除了快乐禁止入内》",
     year:"2025",
     tracks:"01 除了快乐禁止入内 · 02 要去有你在的地方 · 03 奇观 · 04 红移 · 05 到不了的季节 · 06 与夜为敌 · 07 Miracle · 08 好的没关系都可以 · 09 平流层 · 10 礼物",
-    award:"第32届东方风云榜年度人气歌手 · TMEA年度最具影响力品质歌手 · TMEA年度人气实体专辑 · IFPI 白金认证",
+    award:"第32届东方风云榜年度人气歌手 · TMEA年度最具影响力品质歌手 · TMEA年度人气实体专辑 · IFPI 白金认证 · IFPI五白金认证，实体销量破15万张",
     mv:"https://www.bilibili.com/video/BV1WYypYRE5K/",
   },
   {
@@ -2347,6 +2371,10 @@ const ALBUMS = [
     tracks:"<a href='https://weibo.com/7947615262/5079321229919303' target='_blank' rel='noopener'>→ 微博：歌曲全合集（官博）</a>",
     award:"",
   },
+  { tag:"单曲", name:"来自时光", year:"2026", tracks:"亲自作曲，易家扬作词，吴庆隆编曲，登由你榜日榜TOP1", award:"单日播放量破百万" },
+  { tag:"单曲", name:"万象回响", year:"2026", tracks:"陈建骐制作，鸟巢演唱会定制曲，八万人合唱", award:"话题阅读量破亿" },
+  { tag:"OST", name:"花鳞", year:"2026", tracks:"《月鳞绮纪》燃斗曲，2026年4月20日上线", award:"" },
+  { tag:"单曲", name:"Sillage", year:"2025", tracks:"法语自作曲", award:"腾讯音乐榜青年歌手中坚组TOP1" },
 ];
 
 // ── 音乐剧 ──
@@ -3303,6 +3331,8 @@ const ACHIEVE_DATA = [
   {icon:"🏅",title:"13项大奖",desc:"蝉联TMEA「年度最具影响力品质歌手」、东方风云榜「年度人气歌手」等13项大奖"},
   {icon:"🎪",title:"MUSE铂金奖",desc:"个人巡演《除了快乐禁止入内》获设计界奥斯卡「MUSE铂金奖」"},
   {icon:"💛",title:"双向奔赴",desc:"长沙收官场临时加开40分钟直播，深圳暴雨场提前备好雨衣，粉丝战歌入巡演纪录片"},
+  { icon:"🏟️", title:"鸟巢首位新生代歌手", desc:"入选\"未来主场计划\"，连开两场演唱会，动员观众超11万人次" },
+  { icon:"🏆", title:"QQ音乐2026 Q1十大艺人", desc:"获QQ音乐2026年第一季度巅峰榜十大艺人，央视认证\"舞台造梦标杆\"" },
 ];
 (function(){
   const grid = document.getElementById("achieve-grid");
